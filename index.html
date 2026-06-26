@@ -109,37 +109,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .header-user-info .sub-text2 {
-            font-size: 8px;
-            color: rgba(255,255,255,0.6);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* ===== TRUST BANNER ===== */
-        .trust-banner {
-            background: linear-gradient(135deg, #065f46, #10b981);
-            padding: 6px 12px;
-            text-align: center;
-            border-radius: 0 0 14px 14px;
-            margin: -20px -20px 15px -20px;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
-            flex-shrink: 0;
-        }
-        .trust-banner p {
-            margin: 0;
-            color: #fff;
-            font-weight: 700;
-            font-size: 13px;
-        }
-        .trust-banner small {
-            display: block;
-            margin-top: 1px;
-            color: #d1fae5;
-            font-size: 10px;
-            font-weight: 500;
-        }
 
         /* ===== SOCIAL PROOF ===== */
         .social-proof {
@@ -304,16 +273,38 @@
             box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
+        /* ===== DAILY BONUS BUTTON ===== */
         .daily-bonus-btn {
             background: linear-gradient(135deg, #f59e0b, #d97706) !important;
             color: #fff !important;
             border: none !important;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .daily-bonus-btn:active {
+            transform: scale(0.97);
         }
         .daily-bonus-btn:disabled {
             background: var(--border-color) !important;
             color: var(--light-text-color) !important;
             box-shadow: none !important;
+            cursor: not-allowed;
+        }
+        .daily-bonus-btn .countdown {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-left: 4px;
         }
 
         /* ===== PROGRESS BAR ===== */
@@ -652,16 +643,9 @@
             <img id="header-profile-pic" src="" alt="Profile" class="header-profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
             <div class="header-user-info">
                 <h3 id="header-user-name">User</h3>
-                <div class="sub-text">🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</div>
-                <div class="sub-text2">💚 আপনার টাকা আমরা আটকাবো না</div>
+                <div class="sub-text">💰 USD EARNING</div>
             </div>
         </header>
-
-        <!-- TRUST BANNER -->
-        <div class="trust-banner">
-            <p>🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</p>
-            <small>💚 আপনার টাকা আমরা আটকাবো না</small>
-        </div>
 
         <!-- TOAST CONTAINER -->
         <div class="toast-container" id="toast-container"></div>
@@ -930,7 +914,7 @@
             const userData = tg.initDataUnsafe.user;
             const userId = userData ? userData.id : 'guest';
 
-            // ========== BOT TOKEN (আপনার টোকেন) ==========
+            // ========== BOT TOKEN ==========
             const BOT_TOKEN = '8732196129:AAGUyvyPNqHdLNp8BBGtCH-IDUs4z0vgVL8';
 
             // ========== CONSTANTS ==========
@@ -963,10 +947,13 @@
                     <span class="toast-close material-icons">close</span>
                 `;
                 container.appendChild(toast);
-                setTimeout(() => {
+                // Auto remove after exactly 5 seconds
+                const timer = setTimeout(() => {
                     if (toast.parentNode) toast.remove();
                 }, 5000);
+                // Manual close
                 toast.querySelector('.toast-close').addEventListener('click', () => {
+                    clearTimeout(timer);
                     toast.remove();
                 });
             }
@@ -1047,7 +1034,7 @@
                 setTimeout(() => { container.innerHTML = ''; }, 3500);
             }
 
-            // ========== PROFILE PICTURE (Telegram Bot API দিয়ে) ==========
+            // ========== PROFILE PICTURE (Bot API) ==========
             async function loadProfilePhotoFromBot(userId) {
                 try {
                     const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUserProfilePhotos?user_id=${userId}&limit=1`;
@@ -1216,15 +1203,54 @@
                 document.getElementById('referral-link-input').value = link;
                 document.getElementById('referral-link-display').textContent = link;
 
-                // Daily Bonus
-                const lastBonus = parseInt(getUserValue('lastDailyBonus') || '0');
-                const today = new Date().toDateString();
-                if (lastBonus === new Date(today).getTime()) {
+                // Daily Bonus - update button and countdown
+                const lastBonusTime = parseInt(getUserValue('lastDailyBonus') || '0');
+                const now = Date.now();
+                const diff = now - lastBonusTime;
+                const oneDay = 24 * 60 * 60 * 1000;
+
+                if (lastBonusTime > 0 && diff < oneDay) {
+                    const remaining = oneDay - diff;
+                    const hours = Math.floor(remaining / (60 * 60 * 1000));
+                    const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+                    const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
                     dailyBonusBtn.disabled = true;
-                    dailyBonusBtn.innerHTML = '✅ Already Claimed Today';
+                    dailyBonusBtn.innerHTML = `
+                        <span class="material-icons">hourglass_empty</span>
+                        ⏳ ${hours}h ${minutes}m ${seconds}s
+                        <span class="countdown">বাকি</span>
+                    `;
+                    // Update countdown every second
+                    if (!window.countdownInterval) {
+                        window.countdownInterval = setInterval(() => {
+                            const now2 = Date.now();
+                            const diff2 = now2 - lastBonusTime;
+                            if (diff2 >= oneDay) {
+                                clearInterval(window.countdownInterval);
+                                window.countdownInterval = null;
+                                dailyBonusBtn.disabled = false;
+                                dailyBonusBtn.innerHTML = `<span class="material-icons">emoji_events</span> Claim Daily Bonus`;
+                                updateUI(); // re-run to show claimable
+                            } else {
+                                const rem = oneDay - diff2;
+                                const h = Math.floor(rem / (60 * 60 * 1000));
+                                const m = Math.floor((rem % (60 * 60 * 1000)) / (60 * 1000));
+                                const s = Math.floor((rem % (60 * 1000)) / 1000);
+                                dailyBonusBtn.innerHTML = `
+                                    <span class="material-icons">hourglass_empty</span>
+                                    ⏳ ${h}h ${m}m ${s}s
+                                    <span class="countdown">বাকি</span>
+                                `;
+                            }
+                        }, 1000);
+                    }
                 } else {
                     dailyBonusBtn.disabled = false;
-                    dailyBonusBtn.innerHTML = '<span class="material-icons">emoji_events</span> Claim Daily Bonus';
+                    dailyBonusBtn.innerHTML = `<span class="material-icons">emoji_events</span> Claim Daily Bonus`;
+                    if (window.countdownInterval) {
+                        clearInterval(window.countdownInterval);
+                        window.countdownInterval = null;
+                    }
                 }
 
                 renderPendingList();
@@ -1253,9 +1279,10 @@
 
             // ========== DAILY BONUS ==========
             dailyBonusBtn.addEventListener('click', () => {
-                const today = new Date().toDateString();
-                const lastBonus = parseInt(getUserValue('lastDailyBonus') || '0');
-                if (lastBonus === new Date(today).getTime()) {
+                const lastBonusTime = parseInt(getUserValue('lastDailyBonus') || '0');
+                const now = Date.now();
+                const oneDay = 24 * 60 * 60 * 1000;
+                if (lastBonusTime > 0 && (now - lastBonusTime) < oneDay) {
                     showToast('আপনি আজ বোনাস নিয়ে নিয়েছেন! কাল আবার আসুন।', '✅');
                     return;
                 }
@@ -1263,7 +1290,7 @@
                 let streak = parseInt(getUserValue('dailyBonusStreak') || '0') + 1;
                 setUserValue('earnings', realEarnings);
                 setUserValue('dailyBonusStreak', streak);
-                setUserValue('lastDailyBonus', new Date(today).getTime());
+                setUserValue('lastDailyBonus', now);
                 const displayBonus = DAILY_BONUS_AMOUNT * (DISPLAY_REWARD / AD_REWARD);
                 fireConfetti();
                 showToast(`🎉 দারুণ! আপনি $${displayBonus.toFixed(2)} বোনাস পেয়েছেন! স্ট্রিক: ${streak} দিন 🔥`, '🎉');
