@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Earning App</title>
+    <title>USD EARNING</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- 🔥 নতুন SDK বসানো হয়েছে (পুরানোটি সরানো) -->
     <script src='//libtl.com/sdk.js' data-zone='11203893' data-sdk='show_11203893'></script>
 
     <style>
@@ -21,13 +19,22 @@
             --text-color: #f8fafc;
             --light-text-color: #94a3b8;
             --border-color: #334155;
+            --pending-color: #f59e0b;
+            --completed-color: #10b981;
+            --rejected-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             margin: 0;
-            padding-bottom: 60px;
+            padding-bottom: 70px;
             color: var(--text-color);
         }
 
@@ -60,6 +67,7 @@
             border: 2px solid var(--primary-color);
             background-color: var(--border-color);
             object-fit: cover;
+            flex-shrink: 0;
         }
 
         .header-user-info h3 {
@@ -78,6 +86,7 @@
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
+            padding-bottom: 80px;
         }
 
         .card {
@@ -149,7 +158,7 @@
             color: var(--light-text-color);
         }
 
-        .primary-btn, .secondary-btn {
+        .primary-btn, .secondary-btn, .danger-btn {
             border: none;
             padding: 15px;
             border-radius: 10px;
@@ -196,7 +205,12 @@
             background-color: var(--border-color);
             transform: translateY(-2px);
         }
-        
+
+        .danger-btn {
+            background-color: var(--rejected-color);
+            color: #fff;
+        }
+
         .progress-bar-container {
             height: 10px;
             background-color: var(--border-color);
@@ -223,27 +237,24 @@
             background-color: var(--card-background);
             border-top: 1px solid var(--border-color);
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 200;
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px 5px;
+            padding: 8px 5px;
             cursor: pointer;
             color: var(--light-text-color);
             transition: color 0.3s;
             flex: 1;
+            font-size: 10px;
         }
 
         .nav-item .material-icons, .nav-item .fa-solid {
             font-size: 22px;
-            margin-bottom: 3px;
-        }
-
-        .nav-item-label {
-            font-size: 10px;
-            font-weight: 500;
+            margin-bottom: 2px;
         }
 
         .nav-item.active {
@@ -252,7 +263,7 @@
 
         .page {
             display: none;
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.3s;
         }
 
         .page.active {
@@ -260,8 +271,8 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .profile-info, .withdraw-form-container, .referral-container {
@@ -375,19 +386,75 @@
             font-size: 12px;
             color: var(--light-text-color);
         }
+
+        .pending-item {
+            background: var(--background-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        .pending-item .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pending-item .amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        .pending-item .method {
+            font-size: 14px;
+            color: var(--light-text-color);
+        }
+        .pending-item .status {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: var(--pending-color);
+            color: #000;
+        }
+        .status-completed {
+            background: var(--completed-color);
+            color: #fff;
+        }
+        .status-rejected {
+            background: var(--rejected-color);
+            color: #fff;
+        }
+        .pending-item .date {
+            font-size: 12px;
+            color: var(--light-text-color);
+            margin-top: 5px;
+        }
+        .pending-empty {
+            text-align: center;
+            color: var(--light-text-color);
+            padding: 30px 0;
+        }
+        .pending-empty .material-icons {
+            font-size: 48px;
+            color: var(--border-color);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <img id="header-profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="header-profile-pic" onerror="this.src='https://via.placeholder.com/40';">
+            <img id="header-profile-pic" src="https://via.placeholder.com/40" alt="Profile" class="header-profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="this.src='https://via.placeholder.com/40';">
             <div class="header-user-info">
                 <h3 id="header-user-name">User</h3>
-                <p>Welcome to the Earning App!</p>
+                <p>Welcome to USD EARNING!</p>
             </div>
         </header>
 
         <main class="content">
+            <!-- HOME PAGE -->
             <section id="home-page" class="page active">
                 <div class="card balance-card">
                     <h2 class="card-header">
@@ -423,6 +490,7 @@
                 </div>
             </section>
 
+            <!-- EARN PAGE -->
             <section id="earn-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -443,6 +511,7 @@
                 </div>
             </section>
             
+            <!-- WITHDRAW PAGE -->
             <section id="withdraw-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -454,7 +523,7 @@
                     <div style="margin-top: 20px; font-size: 14px; color: var(--light-text-color);">
                         Minimum withdraw amount is USD 50.00
                     </div>
-                    <div style="margin-top: 10px; font-size: 13px; color: var(--light-text-color);" id="withdraw-referral-info">
+                    <div style="margin-top: 10px; font-size: 13px;" id="withdraw-referral-info">
                         You need at least 15 referrals to withdraw
                     </div>
                 </div>
@@ -484,8 +553,22 @@
                         </button>
                     </form>
                 </div>
+
+                <div class="profile-info" style="margin-top: 20px;">
+                    <h4 style="margin-top: 0; text-align:left;">
+                        <span class="material-icons" style="font-size: 20px; vertical-align: middle;">pending</span>
+                        Withdraw History
+                    </h4>
+                    <div id="pending-list">
+                        <div class="pending-empty">
+                            <span class="material-icons">history</span>
+                            <p>No withdrawal requests yet</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            <!-- REFERRAL PAGE -->
             <section id="referral-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -520,10 +603,11 @@
                 </div>
             </section>
 
+            <!-- PROFILE PAGE -->
             <section id="profile-page" class="page">
                 <div class="card" style="padding: 30px;">
                     <div class="profile-pic-container">
-                        <img id="profile-page-pic" src="https://via.placeholder.com/80" alt="Profile Picture" class="profile-pic" onerror="this.src='https://via.placeholder.com/80';">
+                        <img id="profile-page-pic" src="https://via.placeholder.com/80" alt="Profile Picture" class="profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="this.src='https://via.placeholder.com/80';">
                     </div>
                     <h3 id="profile-user-name" style="margin: 0; font-weight: 600;">User</h3>
                     <p id="profile-user-username" style="margin: 5px 0 0; color: var(--light-text-color); font-size: 14px;">@telegram</p>
@@ -574,15 +658,14 @@
         </nav>
     </div>
 
-    <!-- 🔥 পুরানো SDK সরিয়ে নতুন SDK বসানো হলো -->
-    <script src='//libtl.com/sdk.js' data-zone='11203893' data-sdk='show_11203893'></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tg = window.Telegram.WebApp;
             tg.ready();
             tg.expand();
             const userData = tg.initDataUnsafe.user;
+            const userId = userData ? userData.id : 'guest';
+            
             const defaultProfilePic40 = 'https://via.placeholder.com/40';
             const defaultProfilePic80 = 'https://via.placeholder.com/80';
 
@@ -594,59 +677,180 @@
             const withdrawForm = document.getElementById('withdraw-form');
 
             const DAILY_ADS_LIMIT = 50;
-            const AD_REWARD = 0.02;
+            const AD_REWARD = 0.02;        // আসল আয়
+            const DISPLAY_REWARD = 0.30;   // ইউজারকে দেখানো হবে
             const MIN_WITHDRAW_AMOUNT = 50;
             const MIN_REFERRALS_FOR_WITHDRAW = 15;
 
-            if (!localStorage.getItem('earnings')) {
-                localStorage.setItem('earnings', '0');
-                localStorage.setItem('adsWatched', '0');
-                localStorage.setItem('totalReferrals', '0');
-                localStorage.setItem('processedRefs', JSON.stringify([]));
-                localStorage.setItem('referralEarnings', '0');
+            // ============= ইউজার ডেটা =============
+            function getUserData() {
+                const allData = JSON.parse(localStorage.getItem('allUserData') || '{}');
+                if (!allData[userId]) {
+                    allData[userId] = {
+                        earnings: '0',
+                        adsWatched: '0',
+                        totalReferrals: '0',
+                        referralEarnings: '0',
+                        processedRefs: '[]',
+                        pendingWithdrawals: '[]'
+                    };
+                    localStorage.setItem('allUserData', JSON.stringify(allData));
+                }
+                return allData[userId];
             }
 
-            function updateUI() {
-                const earnings = parseFloat(localStorage.getItem('earnings'));
-                const adsWatched = parseInt(localStorage.getItem('adsWatched'));
-                const referrals = parseInt(localStorage.getItem('totalReferrals'));
-                const refEarnings = parseFloat(localStorage.getItem('referralEarnings') || '0');
+            function setUserData(data) {
+                const allData = JSON.parse(localStorage.getItem('allUserData') || '{}');
+                allData[userId] = data;
+                localStorage.setItem('allUserData', JSON.stringify(allData));
+            }
 
-                const formattedEarnings = earnings.toFixed(2);
-                const formattedRefEarnings = refEarnings.toFixed(2);
+            function getUserValue(key) {
+                const data = getUserData();
+                return data[key] || '0';
+            }
+
+            function setUserValue(key, value) {
+                const data = getUserData();
+                data[key] = value.toString();
+                setUserData(data);
+            }
+
+            // ============= ডিসপ্লে ভ্যালু =============
+            function getDisplayBalance() {
+                const realEarnings = parseFloat(getUserValue('earnings'));
+                return realEarnings * (DISPLAY_REWARD / AD_REWARD);
+            }
+
+            function getDisplayReferralEarnings() {
+                const realRefEarnings = parseFloat(getUserValue('referralEarnings') || '0');
+                return realRefEarnings * (DISPLAY_REWARD / AD_REWARD);
+            }
+
+            function getRealAmountFromDisplay(displayAmount) {
+                return displayAmount * (AD_REWARD / DISPLAY_REWARD);
+            }
+
+            // ============= প্রোফাইল পিকচার =============
+            function setProfilePicture(url) {
+                const headerImg = document.getElementById('header-profile-pic');
+                const profileImg = document.getElementById('profile-page-pic');
+                if (url) {
+                    headerImg.src = url;
+                    profileImg.src = url;
+                } else {
+                    headerImg.src = defaultProfilePic40;
+                    profileImg.src = defaultProfilePic80;
+                }
+            }
+
+            // ============= পেন্ডিং উইথড্রয়াল =============
+            function addPendingWithdrawal(realAmount, displayAmount, method, account) {
+                const data = getUserData();
+                const pending = JSON.parse(data.pendingWithdrawals || '[]');
+                pending.push({
+                    id: Date.now(),
+                    realAmount: realAmount,
+                    displayAmount: displayAmount,
+                    method: method,
+                    account: account,
+                    status: 'pending',
+                    date: new Date().toLocaleString()
+                });
+                data.pendingWithdrawals = JSON.stringify(pending);
+                setUserData(data);
+                renderPendingList();
+            }
+
+            function renderPendingList() {
+                const container = document.getElementById('pending-list');
+                const data = getUserData();
+                const pending = JSON.parse(data.pendingWithdrawals || '[]');
+                
+                if (pending.length === 0) {
+                    container.innerHTML = `
+                        <div class="pending-empty">
+                            <span class="material-icons">history</span>
+                            <p>No withdrawal requests yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = pending.map(item => {
+                    let statusClass = 'status-pending';
+                    let statusText = '⏳ Pending';
+                    if (item.status === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = '✅ Completed';
+                    } else if (item.status === 'rejected') {
+                        statusClass = 'status-rejected';
+                        statusText = '❌ Rejected';
+                    }
+                    return `
+                        <div class="pending-item">
+                            <div class="top-row">
+                                <span class="amount">USD ${item.displayAmount.toFixed(2)}</span>
+                                <span class="status ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="method">${item.method} - ${item.account}</div>
+                            <div class="date">📅 ${item.date}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // ============= রেফারেল লিংক =============
+            function generateReferralLink() {
+                let userIdRef = 'guest';
+                if (userData && userData.id) {
+                    userIdRef = userData.id;
+                } else if (userData && userData.username) {
+                    userIdRef = userData.username;
+                }
+                const botUsername = 'USDEarningBot';
+                return `https://t.me/${botUsername}?start=ref_${userIdRef}`;
+            }
+
+            // ============= UI আপডেট =============
+            function updateUI() {
+                const realEarnings = parseFloat(getUserValue('earnings'));
+                const adsWatched = parseInt(getUserValue('adsWatched'));
+                const referrals = parseInt(getUserValue('totalReferrals'));
+                const realRefEarnings = parseFloat(getUserValue('referralEarnings') || '0');
+
+                const displayBalance = getDisplayBalance();
+                const displayRefEarnings = getDisplayReferralEarnings();
 
                 if(userData) {
                     const fullName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim();
                     document.getElementById('header-user-name').textContent = fullName || 'User';
                     document.getElementById('profile-user-name').textContent = fullName || 'User';
                     document.getElementById('profile-user-username').textContent = userData.username ? `@${userData.username}` : 'No username';
-                    
                     if (userData.photo_url) {
-                        const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                        const proxiedPhotoUrl = `${proxyUrl}${encodeURIComponent(userData.photo_url)}`;
-                        
-                        document.getElementById('header-profile-pic').src = proxiedPhotoUrl;
-                        document.getElementById('profile-page-pic').src = proxiedPhotoUrl;
+                        setProfilePicture(userData.photo_url);
                     } else {
-                        document.getElementById('header-profile-pic').src = defaultProfilePic40;
-                        document.getElementById('profile-page-pic').src = defaultProfilePic80;
+                        setProfilePicture(null);
                     }
                 }
 
-                document.getElementById('current-balance').textContent = `USD ${formattedEarnings}`;
-                document.getElementById('total-earnings').textContent = `USD ${formattedEarnings}`;
+                document.getElementById('current-balance').textContent = `USD ${displayBalance.toFixed(2)}`;
+                document.getElementById('total-earnings').textContent = `USD ${displayBalance.toFixed(2)}`;
                 document.getElementById('ads-watched').textContent = adsWatched;
                 document.getElementById('total-referrals').textContent = referrals;
 
                 document.getElementById('ad-progress-text').textContent = `Completed: ${adsWatched} / ${DAILY_ADS_LIMIT}`;
                 const progress = (adsWatched / DAILY_ADS_LIMIT) * 100;
-                document.getElementById('ad-progress-bar').style.width = `${progress}%`;
+                document.getElementById('ad-progress-bar').style.width = `${Math.min(progress, 100)}%`;
                 
                 watchAdBtn.disabled = adsWatched >= DAILY_ADS_LIMIT;
-                watchAdBtn.querySelector('span').textContent = adsWatched >= DAILY_ADS_LIMIT ? 'cancel' : 'play_circle_filled';
-                if(adsWatched >= DAILY_ADS_LIMIT) watchAdBtn.childNodes[0].nodeValue = "দৈনিক সীমা পৌঁছে গেছে ";
+                const span = watchAdBtn.querySelector('span');
+                if (span) span.textContent = adsWatched >= DAILY_ADS_LIMIT ? 'cancel' : 'play_circle_filled';
+                if(adsWatched >= DAILY_ADS_LIMIT) {
+                    watchAdBtn.childNodes[0].nodeValue = "দৈনিক সীমা পৌঁছে গেছে ";
+                }
 
-                document.getElementById('withdraw-balance-display').textContent = `USD ${formattedEarnings}`;
+                document.getElementById('withdraw-balance-display').textContent = `USD ${displayBalance.toFixed(2)}`;
                 
                 const canWithdraw = referrals >= MIN_REFERRALS_FOR_WITHDRAW;
                 const withdrawSubmitBtn = document.getElementById('submit-withdraw-btn');
@@ -658,8 +862,8 @@
                     withdrawInfo.textContent = `⚠️ You have ${referrals} referrals. Need ${MIN_REFERRALS_FOR_WITHDRAW - referrals} more to withdraw.`;
                     withdrawInfo.style.color = '#ff6b6b';
                 } else {
-                    withdrawSubmitBtn.disabled = earnings < MIN_WITHDRAW_AMOUNT;
-                    if(earnings < MIN_WITHDRAW_AMOUNT) {
+                    withdrawSubmitBtn.disabled = displayBalance < MIN_WITHDRAW_AMOUNT;
+                    if(displayBalance < MIN_WITHDRAW_AMOUNT) {
                         withdrawSubmitBtn.textContent = `Minimum USD ${MIN_WITHDRAW_AMOUNT} required`;
                     } else {
                         withdrawSubmitBtn.textContent = 'Submit Withdraw Request';
@@ -668,15 +872,23 @@
                     withdrawInfo.style.color = 'var(--secondary-color)';
                 }
 
-                document.getElementById('profile-balance').textContent = `USD ${formattedEarnings}`;
-                document.getElementById('profile-earnings').textContent = `USD ${formattedEarnings}`;
+                document.getElementById('profile-balance').textContent = `USD ${displayBalance.toFixed(2)}`;
+                document.getElementById('profile-earnings').textContent = `USD ${displayBalance.toFixed(2)}`;
                 document.getElementById('profile-ads-watched').textContent = adsWatched;
                 document.getElementById('profile-referrals').textContent = referrals;
 
                 document.getElementById('ref-total').textContent = referrals;
-                document.getElementById('ref-earnings').textContent = `USD ${formattedRefEarnings}`;
+                document.getElementById('ref-earnings').textContent = `USD ${displayRefEarnings.toFixed(2)}`;
+
+                const linkInput = document.getElementById('referral-link-input');
+                if (linkInput) {
+                    linkInput.value = generateReferralLink();
+                }
+
+                renderPendingList();
             }
 
+            // ============= পেজ সুইচ =============
             function showPage(targetPageId) {
                 navItems.forEach(nav => nav.classList.remove('active'));
                 pages.forEach(page => page.classList.remove('active'));
@@ -686,6 +898,10 @@
                 
                 const activePage = document.getElementById(targetPageId);
                 if (activePage) activePage.classList.add('active');
+                
+                if (targetPageId === 'withdraw-page') {
+                    renderPendingList();
+                }
             }
 
             navItems.forEach(item => {
@@ -695,25 +911,24 @@
             startEarningBtn.addEventListener('click', () => showPage('earn-page'));
             withdrawBtn.addEventListener('click', () => showPage('withdraw-page'));
             
-            // 🔥 watchAdBtn - Rewarded Popup সহ নতুন কোড
+            // ============= ওয়াচ অ্যাড =============
             watchAdBtn.addEventListener('click', () => {
-                if (parseInt(localStorage.getItem('adsWatched')) >= DAILY_ADS_LIMIT) {
+                if (parseInt(getUserValue('adsWatched')) >= DAILY_ADS_LIMIT) {
                     tg.showAlert('আপনার দৈনিক বিজ্ঞাপনের সীমা পৌঁছে গেছে।');
                     return;
                 }
 
                 watchAdBtn.disabled = true;
 
-                // 🔥 নতুন Rewarded Popup (show_11203893)
                 if (typeof show_11203893 === 'function') {
                     show_11203893('pop').then(() => {
-                        let earnings = parseFloat(localStorage.getItem('earnings')) + AD_REWARD;
-                        let currentAdsWatched = parseInt(localStorage.getItem('adsWatched')) + 1;
+                        let realEarnings = parseFloat(getUserValue('earnings')) + AD_REWARD;
+                        let currentAdsWatched = parseInt(getUserValue('adsWatched')) + 1;
                         
-                        localStorage.setItem('earnings', earnings.toString());
-                        localStorage.setItem('adsWatched', currentAdsWatched.toString());
+                        setUserValue('earnings', realEarnings);
+                        setUserValue('adsWatched', currentAdsWatched);
                         
-                        tg.showAlert(`বিজ্ঞাপনটি দেখার জন্য আপনি USD ${AD_REWARD.toFixed(2)} পেয়েছেন!`);
+                        tg.showAlert(`🎉 আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন!`);
                     }).catch((e) => {
                         console.log('Ad error:', e);
                         tg.showAlert('বিজ্ঞাপনটি দেখাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
@@ -721,45 +936,67 @@
                         updateUI();
                     });
                 } else {
-                    // Fallback (টেস্ট মোড)
-                    let earnings = parseFloat(localStorage.getItem('earnings')) + AD_REWARD;
-                    let currentAdsWatched = parseInt(localStorage.getItem('adsWatched')) + 1;
-                    localStorage.setItem('earnings', earnings.toString());
-                    localStorage.setItem('adsWatched', currentAdsWatched.toString());
-                    alert(`(Test Mode) You earned USD ${AD_REWARD.toFixed(2)}!`);
+                    let realEarnings = parseFloat(getUserValue('earnings')) + AD_REWARD;
+                    let currentAdsWatched = parseInt(getUserValue('adsWatched')) + 1;
+                    
+                    setUserValue('earnings', realEarnings);
+                    setUserValue('adsWatched', currentAdsWatched);
+                    
+                    alert(`🎉 আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন! (Test Mode)`);
                     updateUI();
                 }
             });
 
+            // ============= উইথড্রয়াল =============
             withdrawForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
-                const referrals = parseInt(localStorage.getItem('totalReferrals') || '0');
+                const referrals = parseInt(getUserValue('totalReferrals') || '0');
                 
                 if (referrals < MIN_REFERRALS_FOR_WITHDRAW) {
-                    tg.showAlert(`❌ আপনি উইথড্র করতে পারবেন না! আপনাকে কমপক্ষে ${MIN_REFERRALS_FOR_WITHDRAW} জন রেফার করতে হবে। বর্তমানে আপনার রেফারেল: ${referrals}`);
+                    tg.showAlert(`❌ আপনি উইথড্র করতে পারবেন না! আপনাকে কমপক্ষে ${MIN_REFERRALS_FOR_WITHDRAW} জন রেফার করতে হবে।`);
                     return;
                 }
                 
-                const amount = parseFloat(document.getElementById('withdraw-amount').value);
-                const currentBalance = parseFloat(localStorage.getItem('earnings'));
+                const displayAmount = parseFloat(document.getElementById('withdraw-amount').value);
+                const currentDisplayBalance = getDisplayBalance();
                 
-                if (amount > currentBalance) {
+                if (isNaN(displayAmount) || displayAmount < MIN_WITHDRAW_AMOUNT) {
+                    tg.showAlert(`❌ ন্যূনতম উইথড্রয়াল অ্যামাউন্ট USD ${MIN_WITHDRAW_AMOUNT}`);
+                    return;
+                }
+                
+                if (displayAmount > currentDisplayBalance) {
                     tg.showAlert('❌ আপনার ব্যালেন্সের চেয়ে বেশি উইথড্র করতে পারবেন না!');
                     return;
                 }
                 
-                tg.showConfirm(`আপনি কি আপনার উইথড্র অনুরোধ জমা দিতে চান?`, (confirmed) => {
+                const realAmount = getRealAmountFromDisplay(displayAmount);
+                const currentRealBalance = parseFloat(getUserValue('earnings'));
+                
+                const method = document.getElementById('withdraw-method').value;
+                const account = document.getElementById('account-number').value;
+                
+                if (!method || !account) {
+                    tg.showAlert('❌ দয়া করে সব তথ্য পূরণ করুন!');
+                    return;
+                }
+                
+                tg.showConfirm(`আপনি কি USD ${displayAmount.toFixed(2)} উইথড্র করতে চান?`, (confirmed) => {
                     if (confirmed) {
-                        let newEarnings = currentBalance - amount;
-                        localStorage.setItem('earnings', newEarnings.toString());
+                        let newRealBalance = currentRealBalance - realAmount;
+                        setUserValue('earnings', newRealBalance);
+                        
+                        addPendingWithdrawal(realAmount, displayAmount, method, account);
                         
                         tg.sendData(JSON.stringify({ 
                             type: 'withdrawal', 
-                            amount: amount, 
-                            method: document.getElementById('withdraw-method').value,
-                            account: document.getElementById('account-number').value,
-                            referrals: referrals
+                            displayAmount: displayAmount,
+                            realAmount: realAmount,
+                            method: method,
+                            account: account,
+                            referrals: referrals,
+                            userId: userId
                         }));
                         
                         withdrawForm.reset();
@@ -769,25 +1006,7 @@
                 });
             });
 
-            function generateReferralLink() {
-                let userId = 'guest';
-                if (userData && userData.id) {
-                    userId = userData.id;
-                } else if (userData && userData.username) {
-                    userId = userData.username;
-                }
-                const botUsername = 'YourBotUsername';
-                const appLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-                return appLink;
-            }
-
-            function updateReferralLink() {
-                const linkInput = document.getElementById('referral-link-input');
-                if (linkInput) {
-                    linkInput.value = generateReferralLink();
-                }
-            }
-
+            // ============= রেফারেল =============
             document.getElementById('copy-referral-btn')?.addEventListener('click', () => {
                 const linkInput = document.getElementById('referral-link-input');
                 if (navigator.clipboard) {
@@ -807,7 +1026,7 @@
 
             document.getElementById('share-referral-btn')?.addEventListener('click', () => {
                 const link = generateReferralLink();
-                const message = `🎉 আসুন এবং আয় করুন! এই অ্যাপে যোগ দিন ও রেফারেল বোনাস পান!\n\nআমার রেফারেল লিংক: ${link}`;
+                const message = `🎉 আসুন এবং আয় করুন! USD EARNING অ্যাপে যোগ দিন ও রেফারেল বোনাস পান!\n\nআমার রেফারেল লিংক: ${link}`;
                 tg.sendData(JSON.stringify({
                     type: 'share_referral',
                     link: link,
@@ -820,38 +1039,50 @@
                 }
             });
 
+            // ============= রেফারেল অ্যাড =============
             function addReferral() {
-                let currentRefs = parseInt(localStorage.getItem('totalReferrals')) || 0;
+                let currentRefs = parseInt(getUserValue('totalReferrals')) || 0;
                 currentRefs += 1;
-                localStorage.setItem('totalReferrals', currentRefs.toString());
+                setUserValue('totalReferrals', currentRefs);
                 
-                let earnings = parseFloat(localStorage.getItem('earnings')) || 0;
-                let refEarnings = parseFloat(localStorage.getItem('referralEarnings') || '0');
-                earnings += 0.50;
-                refEarnings += 0.50;
-                localStorage.setItem('earnings', earnings.toString());
-                localStorage.setItem('referralEarnings', refEarnings.toString());
+                let realEarnings = parseFloat(getUserValue('earnings')) || 0;
+                let realRefEarnings = parseFloat(getUserValue('referralEarnings') || '0');
+                realEarnings += 0.50;
+                realRefEarnings += 0.50;
+                setUserValue('earnings', realEarnings);
+                setUserValue('referralEarnings', realRefEarnings);
                 
+                const displayBonus = 0.50 * (DISPLAY_REWARD / AD_REWARD);
                 updateUI();
-                tg.showAlert('🎉 নতুন রেফারেল! আপনি USD 0.50 বোনাস পেয়েছেন!');
+                tg.showAlert(`🎉 নতুন রেফারেল! আপনি $${displayBonus.toFixed(2)} বোনাস পেয়েছেন!`);
             }
 
             function checkReferralFromURL() {
                 const params = new URLSearchParams(window.location.search);
-                const ref = params.get('ref');
-                if (ref && ref !== 'guest') {
-                    const processedRefs = JSON.parse(localStorage.getItem('processedRefs') || '[]');
-                    if (!processedRefs.includes(ref)) {
-                        processedRefs.push(ref);
-                        localStorage.setItem('processedRefs', JSON.stringify(processedRefs));
-                        addReferral();
+                const ref = params.get('start');
+                if (ref && ref.startsWith('ref_')) {
+                    const refId = ref.replace('ref_', '');
+                    if (refId && refId !== 'guest' && refId !== userId.toString()) {
+                        const processedRefs = JSON.parse(getUserValue('processedRefs') || '[]');
+                        if (!processedRefs.includes(refId)) {
+                            processedRefs.push(refId);
+                            setUserValue('processedRefs', JSON.stringify(processedRefs));
+                            addReferral();
+                        }
                     }
                 }
             }
 
+            // ============= ইনিশিয়ালাইজ =============
             checkReferralFromURL();
-            setTimeout(updateReferralLink, 500);
             updateUI();
+
+            setTimeout(() => {
+                const linkInput = document.getElementById('referral-link-input');
+                if (linkInput) {
+                    linkInput.value = generateReferralLink();
+                }
+            }, 1000);
         });
     </script>
 </body>
