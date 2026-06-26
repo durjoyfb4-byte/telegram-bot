@@ -557,10 +557,10 @@
             color: var(--border-color);
         }
 
-        /* ===== CUSTOM TOAST ===== */
+        /* ===== TOAST NOTIFICATION ===== */
         .toast-container {
             position: fixed;
-            top: 70px;
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
             max-width: 400px;
@@ -582,11 +582,11 @@
             pointer-events: auto;
         }
         .toast .toast-icon {
-            font-size: 24px;
+            font-size: 22px;
             flex-shrink: 0;
         }
         .toast .toast-msg {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-color);
             flex: 1;
             word-break: break-word;
@@ -594,7 +594,7 @@
         .toast .toast-close {
             cursor: pointer;
             color: var(--light-text-color);
-            font-size: 18px;
+            font-size: 16px;
             padding: 0 4px;
         }
         @keyframes toastSlide {
@@ -653,14 +653,14 @@
             <div class="header-user-info">
                 <h3 id="header-user-name">User</h3>
                 <div class="sub-text">🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</div>
-                <div class="sub-text2">💚 আপনার টাকা আমরা মেরে খাবো না</div>
+                <div class="sub-text2">💚 আপনার টাকা আমরা আটকাবো না</div>
             </div>
         </header>
 
         <!-- TRUST BANNER -->
         <div class="trust-banner">
             <p>🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</p>
-            <small>💚 আপনার টাকা আমরা মেরে খাবো না</small>
+            <small>💚 আপনার টাকা আমরা আটকাবো না</small>
         </div>
 
         <!-- TOAST CONTAINER -->
@@ -930,6 +930,9 @@
             const userData = tg.initDataUnsafe.user;
             const userId = userData ? userData.id : 'guest';
 
+            // ========== BOT TOKEN (আপনার টোকেন) ==========
+            const BOT_TOKEN = '8732196129:AAGUyvyPNqHdLNp8BBGtCH-IDUs4z0vgVL8';
+
             // ========== CONSTANTS ==========
             const DAILY_ADS_LIMIT = 50;
             const AD_REWARD = 0.02;
@@ -960,11 +963,9 @@
                     <span class="toast-close material-icons">close</span>
                 `;
                 container.appendChild(toast);
-                // Auto remove after 5 seconds
                 setTimeout(() => {
                     if (toast.parentNode) toast.remove();
                 }, 5000);
-                // Manual close
                 toast.querySelector('.toast-close').addEventListener('click', () => {
                     toast.remove();
                 });
@@ -1046,28 +1047,54 @@
                 setTimeout(() => { container.innerHTML = ''; }, 3500);
             }
 
-            // ========== PROFILE PICTURE ==========
-            function loadProfilePhoto(url, imgElement, avatarId) {
-                if (!url || !imgElement) return;
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = function() {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
-                    imgElement.src = canvas.toDataURL('image/jpeg');
-                    imgElement.style.display = 'block';
-                    const avatar = document.getElementById(avatarId);
-                    if (avatar) avatar.style.display = 'none';
-                };
-                img.onerror = function() {
-                    imgElement.style.display = 'none';
-                    const avatar = document.getElementById(avatarId);
-                    if (avatar) avatar.style.display = 'flex';
-                };
-                img.src = url;
+            // ========== PROFILE PICTURE (Telegram Bot API দিয়ে) ==========
+            async function loadProfilePhotoFromBot(userId) {
+                try {
+                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUserProfilePhotos?user_id=${userId}&limit=1`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.ok && data.result.photos && data.result.photos.length > 0) {
+                        const fileId = data.result.photos[0][0].file_id;
+                        const fileUrl = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`;
+                        const fileResponse = await fetch(fileUrl);
+                        const fileData = await fileResponse.json();
+                        
+                        if (fileData.ok) {
+                            const photoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
+                            return photoUrl;
+                        }
+                    }
+                } catch (error) {
+                    console.log('Profile photo error:', error);
+                }
+                return null;
+            }
+
+            async function updateProfilePicture() {
+                if (!userId || userId === 'guest') return;
+                
+                const headerImg = document.getElementById('header-profile-pic');
+                const profileImg = document.getElementById('profile-page-pic');
+                const headerAvatar = document.getElementById('header-avatar');
+                const profileAvatar = document.getElementById('profile-avatar');
+                
+                const photoUrl = await loadProfilePhotoFromBot(userId);
+                
+                if (photoUrl) {
+                    headerImg.src = photoUrl;
+                    headerImg.style.display = 'block';
+                    headerAvatar.style.display = 'none';
+                    
+                    profileImg.src = photoUrl;
+                    profileImg.style.display = 'block';
+                    profileAvatar.style.display = 'none';
+                } else {
+                    headerImg.style.display = 'none';
+                    headerAvatar.style.display = 'flex';
+                    profileImg.style.display = 'none';
+                    profileAvatar.style.display = 'flex';
+                }
             }
 
             // ========== PENDING WITHDRAWALS ==========
@@ -1116,7 +1143,7 @@
             }
 
             // ========== UI UPDATE ==========
-            function updateUI() {
+            async function updateUI() {
                 const realEarnings = parseFloat(getUserValue('earnings'));
                 const adsWatched = parseInt(getUserValue('adsWatched'));
                 const referrals = parseInt(getUserValue('totalReferrals'));
@@ -1132,12 +1159,14 @@
                     document.getElementById('header-avatar').textContent = initial;
                     document.getElementById('header-user-name').textContent = fullName || 'User';
                     document.getElementById('profile-user-name').textContent = fullName || 'User';
-                    document.getElementById('profile-user-username').textContent = userData.username ? `@${userData.username}` : 'No username';
+                    
+                    const username = userData.username || '';
+                    document.getElementById('profile-user-username').textContent = username ? `@${username}` : 'No username';
+                    
                     document.getElementById('profile-avatar').textContent = initial;
-                    if (userData.photo_url) {
-                        loadProfilePhoto(userData.photo_url, document.getElementById('header-profile-pic'), 'header-avatar');
-                        loadProfilePhoto(userData.photo_url, document.getElementById('profile-page-pic'), 'profile-avatar');
-                    }
+                    
+                    // প্রোফাইল পিকচার আপডেট
+                    await updateProfilePicture();
                 }
 
                 // Level Badge
