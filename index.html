@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>USD EARNING</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -22,21 +22,20 @@
             --rejected-color: #ef4444;
             --gradient-start: #3b82f6;
             --gradient-end: #8b5cf6;
-            --level-bronze: #cd7f32;
-            --level-silver: #c0c0c0;
-            --level-gold: #ffd700;
-            --level-platinum: #e5e4e2;
-            --level-diamond: #b9f2ff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
+        html, body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-color);
             margin: 0;
+            padding: 0;
             padding-bottom: 70px;
             color: var(--text-color);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .container {
@@ -47,6 +46,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
         /* ===== HEADER ===== */
@@ -58,6 +58,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .header-avatar {
@@ -87,48 +88,56 @@
             display: none;
         }
 
+        .header-user-info {
+            flex: 1;
+            min-width: 0;
+        }
         .header-user-info h3 {
             margin: 0;
             font-size: 16px;
             font-weight: 600;
             color: #fff;
-        }
-        .header-user-info p {
-            margin: 0;
-            font-size: 11px;
-            color: rgba(255,255,255,0.8);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .header-user-info .sub-text {
-            font-size: 9px;
+            font-size: 10px;
             color: #fcd34d;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .header-user-info .sub-text2 {
             font-size: 8px;
             color: rgba(255,255,255,0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ===== TRUST BANNER ===== */
         .trust-banner {
             background: linear-gradient(135deg, #065f46, #10b981);
-            padding: 8px 16px;
+            padding: 6px 12px;
             text-align: center;
             border-radius: 0 0 14px 14px;
-            margin: -20px -20px 20px -20px;
+            margin: -20px -20px 15px -20px;
             box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            flex-shrink: 0;
         }
         .trust-banner p {
             margin: 0;
             color: #fff;
             font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 0.3px;
+            font-size: 13px;
         }
         .trust-banner small {
             display: block;
-            margin-top: 2px;
+            margin-top: 1px;
             color: #d1fae5;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
         }
 
@@ -137,48 +146,38 @@
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 10px;
-            padding: 8px 12px;
-            margin-bottom: 15px;
+            padding: 6px 10px;
+            margin-bottom: 12px;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--light-text-color);
-            animation: pulseGlow 2s infinite;
         }
         .social-proof strong {
             color: var(--secondary-color);
-        }
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         /* ===== CONTENT ===== */
         .content {
             flex-grow: 1;
-            padding: 20px;
+            padding: 15px 16px;
             overflow-y: auto;
             padding-bottom: 80px;
         }
 
         .card {
             background-color: var(--background-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             text-align: center;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
 
         .card-header {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-color);
             display: flex;
             align-items: center;
@@ -187,6 +186,7 @@
         .card-header .material-icons, .card-header .fa-solid {
             margin-right: 8px;
             color: var(--primary-color);
+            font-size: 20px;
         }
 
         .balance-card {
@@ -194,88 +194,82 @@
             border: 1px solid var(--border-color);
         }
         .balance-card .balance {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: 700;
             background: linear-gradient(135deg, var(--secondary-color), #34d399);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .card-label {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--light-text-color);
         }
 
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .dashboard-item {
             background-color: var(--card-background);
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
             border: 1px solid var(--border-color);
-            transition: transform 0.2s;
-        }
-        .dashboard-item:hover {
-            transform: translateY(-2px);
         }
         .dashboard-item .material-icons {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 8px;
         }
         .dashboard-item-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-color);
         }
         .dashboard-item-label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--light-text-color);
         }
 
         /* ===== LEVEL BADGE ===== */
         .level-badge {
             display: inline-block;
-            padding: 4px 16px;
+            padding: 3px 14px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            margin-top: 5px;
+            margin-top: 4px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .level-bronze { background: var(--level-bronze); color: #fff; }
-        .level-silver { background: var(--level-silver); color: #000; }
-        .level-gold { background: var(--level-gold); color: #000; }
-        .level-platinum { background: var(--level-platinum); color: #000; }
-        .level-diamond { background: var(--level-diamond); color: #000; }
+        .level-bronze { background: #cd7f32; color: #fff; }
+        .level-silver { background: #c0c0c0; color: #000; }
+        .level-gold { background: #ffd700; color: #000; }
+        .level-platinum { background: #e5e4e2; color: #000; }
+        .level-diamond { background: #b9f2ff; color: #000; }
 
         /* ===== BUTTONS ===== */
         .primary-btn, .secondary-btn {
             border: none;
-            padding: 15px 20px;
+            padding: 12px 16px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
-            margin-top: 20px;
+            margin-top: 14px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         .primary-btn .material-icons, .secondary-btn .material-icons {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .primary-btn {
@@ -283,9 +277,8 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+        .primary-btn:active {
+            transform: scale(0.97);
         }
         .primary-btn:disabled {
             background: var(--border-color);
@@ -300,9 +293,8 @@
             color: var(--text-color);
             border: 1px solid var(--border-color);
         }
-        .secondary-btn:hover {
-            background-color: var(--border-color);
-            transform: translateY(-2px);
+        .secondary-btn:active {
+            transform: scale(0.97);
         }
 
         .support-btn-custom {
@@ -310,10 +302,6 @@
             color: #fff !important;
             border: none !important;
             box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-        .support-btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
         }
 
         .daily-bonus-btn {
@@ -330,11 +318,11 @@
 
         /* ===== PROGRESS BAR ===== */
         .progress-bar-container {
-            height: 10px;
+            height: 8px;
             background-color: var(--border-color);
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         .progress-bar {
             height: 100%;
@@ -356,42 +344,43 @@
             border-top: 1px solid var(--border-color);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
             z-index: 200;
-            padding: 5px 0;
+            padding: 4px 0;
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 5px 0;
+            padding: 4px 0;
             cursor: pointer;
             color: var(--light-text-color);
             transition: all 0.3s;
             flex: 1;
-            font-size: 10px;
+            font-size: 9px;
             border-radius: 8px;
+            -webkit-tap-highlight-color: transparent;
         }
         .nav-item .material-icons, .nav-item .fa-solid {
-            font-size: 22px;
-            margin-bottom: 2px;
+            font-size: 20px;
+            margin-bottom: 1px;
             transition: all 0.3s;
         }
         .nav-item.active {
             color: var(--primary-color);
         }
         .nav-item.active .material-icons {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         /* ===== PAGES ===== */
         .page {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.3s ease;
         }
         .page.active {
             display: block;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -399,17 +388,17 @@
         .profile-info, .withdraw-form-container {
             background-color: var(--card-background);
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px 18px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
+            margin-top: 16px;
             border: 1px solid var(--border-color);
         }
         .profile-pic-container {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             overflow: hidden;
             border: 3px solid var(--primary-color);
             display: flex;
@@ -418,40 +407,42 @@
         }
         .profile-pic { width: 100%; height: 100%; object-fit: cover; display: none; }
         .profile-avatar {
-            width: 80px; height: 80px; border-radius: 50%;
+            width: 72px; height: 72px; border-radius: 50%;
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight: bold; font-size: 36px; margin: 0 auto;
+            color: #fff; font-weight: bold; font-size: 32px; margin: 0 auto;
         }
         .profile-info-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid var(--border-color);
+            padding: 10px 0; border-bottom: 1px solid var(--border-color);
         }
         .profile-info-row:last-child { border-bottom: none; }
-        .profile-label { font-size: 16px; color: var(--light-text-color); }
-        .profile-value { font-size: 16px; font-weight: 600; color: var(--primary-color); }
+        .profile-label { font-size: 14px; color: var(--light-text-color); }
+        .profile-value { font-size: 14px; font-weight: 600; color: var(--primary-color); }
 
         /* ===== FORMS ===== */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: left;
         }
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
+            margin-bottom: 4px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--light-text-color);
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             box-sizing: border-box;
-            font-size: 16px;
+            font-size: 15px;
             background-color: var(--background-color);
             color: var(--text-color);
+            -webkit-appearance: none;
+            appearance: none;
         }
         .form-group input:focus, .form-group select:focus {
             outline: none;
@@ -461,69 +452,70 @@
         /* ===== REFERRAL ===== */
         .referral-box {
             background: var(--background-color);
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             margin-top: 10px;
         }
         .referral-link-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
         .referral-link-row input {
             flex: 1;
-            padding: 10px;
+            padding: 8px 10px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             background: var(--background-color);
             color: var(--text-color);
-            font-size: 14px;
+            font-size: 12px;
+            min-width: 0;
         }
         .referral-link-row button {
             margin: 0;
-            padding: 10px 15px;
+            padding: 8px 12px;
             width: auto;
             flex-shrink: 0;
         }
         .referral-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 12px;
         }
         .referral-stat-item {
             background: var(--card-background);
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
             border: 1px solid var(--border-color);
         }
         .referral-stat-item .value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--secondary-color);
         }
         .referral-stat-item .label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--light-text-color);
         }
         .referral-link-display {
             background: var(--background-color);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--light-text-color);
             word-break: break-all;
             border: 1px solid var(--border-color);
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         /* ===== PENDING LIST ===== */
         .pending-item {
             background: var(--background-color);
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             border: 1px solid var(--border-color);
             text-align: left;
         }
@@ -533,17 +525,17 @@
             align-items: center;
         }
         .pending-item .amount {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--secondary-color);
         }
         .pending-item .method {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--light-text-color);
         }
         .pending-item .status {
-            font-size: 12px;
-            padding: 4px 12px;
+            font-size: 11px;
+            padding: 3px 10px;
             border-radius: 20px;
             font-weight: 600;
         }
@@ -551,18 +543,67 @@
         .status-completed { background: var(--completed-color); color: #fff; }
         .status-rejected { background: var(--rejected-color); color: #fff; }
         .pending-item .date {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--light-text-color);
-            margin-top: 5px;
+            margin-top: 4px;
         }
         .pending-empty {
             text-align: center;
             color: var(--light-text-color);
-            padding: 30px 0;
+            padding: 20px 0;
         }
         .pending-empty .material-icons {
-            font-size: 48px;
+            font-size: 40px;
             color: var(--border-color);
+        }
+
+        /* ===== CUSTOM TOAST ===== */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            width: 90%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .toast {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: toastSlide 0.4s ease, toastFade 0.4s ease 4.6s forwards;
+            pointer-events: auto;
+        }
+        .toast .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .toast .toast-msg {
+            font-size: 14px;
+            color: var(--text-color);
+            flex: 1;
+            word-break: break-word;
+        }
+        .toast .toast-close {
+            cursor: pointer;
+            color: var(--light-text-color);
+            font-size: 18px;
+            padding: 0 4px;
+        }
+        @keyframes toastSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toastFade {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
         }
 
         /* ===== CONFETTI ===== */
@@ -573,25 +614,33 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 9998;
             overflow: hidden;
         }
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 2px;
             animation: confettiFall linear forwards;
         }
         @keyframes confettiFall {
             0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--background-color); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 450px) {
-            .container { max-width: 100%; }
-            .balance-card .balance { font-size: 32px; }
+        @media (max-width: 400px) {
+            .balance-card .balance { font-size: 30px; }
+            .header-user-info h3 { font-size: 14px; }
+            .card { padding: 14px; }
+            .dashboard-item { padding: 12px; }
+            .dashboard-item-value { font-size: 18px; }
         }
     </style>
 </head>
@@ -603,21 +652,23 @@
             <img id="header-profile-pic" src="" alt="Profile" class="header-profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
             <div class="header-user-info">
                 <h3 id="header-user-name">User</h3>
-                <p class="sub-text">🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</p>
-                <p class="sub-text2">আপনার এক টাকা আমরা মেরে খাবো না 💚</p>
+                <div class="sub-text">🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</div>
+                <div class="sub-text2">💚 আপনার টাকা আমরা মেরে খাবো না</div>
             </div>
         </header>
 
         <!-- TRUST BANNER -->
         <div class="trust-banner">
             <p>🕌 ইনশাল্লাহ ১০০% পেমেন্ট প্রুফ</p>
-            <small>আপনার এক টাকা আমরা মেরে খাবো না 💚</small>
+            <small>💚 আপনার টাকা আমরা মেরে খাবো না</small>
         </div>
 
+        <!-- TOAST CONTAINER -->
+        <div class="toast-container" id="toast-container"></div>
+
         <main class="content">
-            <!-- ===== HOME PAGE ===== -->
+            <!-- HOME PAGE -->
             <section id="home-page" class="page active">
-                <!-- Social Proof -->
                 <div class="social-proof" id="social-proof">
                     🔥 <strong id="social-users">১২</strong> জন ইউজার আজ <strong>$৫০০+</strong> উইথড্র করেছেন!
                 </div>
@@ -628,7 +679,7 @@
                         My Balance
                     </h2>
                     <div class="balance" id="current-balance">USD 0.00</div>
-                    <div id="level-badge-container" style="margin-top:5px;">
+                    <div id="level-badge-container" style="margin-top:4px;">
                         <span class="level-badge level-bronze" id="level-badge">⭐ Beginner</span>
                     </div>
                     <button class="primary-btn" id="start-earning-btn">
@@ -645,7 +696,7 @@
                         <span class="material-icons" style="color: #f59e0b;">today</span>
                         Daily Bonus
                     </div>
-                    <p style="font-size:13px; color: var(--light-text-color);">
+                    <p style="font-size:12px; color: var(--light-text-color);">
                         🎁 প্রতিদিন লগইন করলে বোনাস পান!
                     </p>
                     <button class="daily-bonus-btn" id="daily-bonus-btn">
@@ -667,7 +718,7 @@
                     </div>
                 </div>
 
-                <div class="card" style="margin-top: 20px;">
+                <div class="card" style="margin-top:16px;">
                     <div class="card-header">
                         <span class="material-icons">group</span>
                         Total Referrals
@@ -676,25 +727,25 @@
                 </div>
 
                 <!-- Support Button -->
-                <div style="margin-top: 20px;">
-                    <button class="secondary-btn support-btn-custom" id="support-btn" style="margin-top: 0;">
-                        <span class="material-icons" style="font-size:20px;">support_agent</span>
+                <div style="margin-top:16px;">
+                    <button class="secondary-btn support-btn-custom" id="support-btn" style="margin-top:0;">
+                        <span class="material-icons" style="font-size:18px;">support_agent</span>
                         📞 সাপোর্টে যোগাযোগ করুন
                     </button>
-                    <p style="font-size:10px; color: var(--light-text-color); margin-top:6px; text-align:center;">
-                        ⏰ সাপোর্ট সময়: সকাল ৯টা — রাত ১১টা (বাংলাদেশ সময়)
+                    <p style="font-size:9px; color: var(--light-text-color); margin-top:4px; text-align:center;">
+                        ⏰ সাপোর্ট সময়: সকাল ৯টা — রাত ১১টা
                     </p>
                 </div>
             </section>
 
-            <!-- ===== EARN PAGE ===== -->
+            <!-- EARN PAGE -->
             <section id="earn-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
                         <span class="material-icons">monetization_on</span>
                         Earn Rewards
                     </h2>
-                    <div style="text-align: left; margin-bottom: 10px;">
+                    <div style="text-align: left; margin-bottom: 8px;">
                         <div style="font-size: 14px; font-weight: 600;">📊 Today's Progress:</div>
                         <div style="font-size: 12px; color: var(--light-text-color);" id="ad-progress-text">Completed: 0 / 50</div>
                     </div>
@@ -705,13 +756,13 @@
                         🎬 বিজ্ঞাপন দেখুন ও আয় করুন
                         <span class="material-icons">play_circle_filled</span>
                     </button>
-                    <div style="margin-top: 10px; font-size: 12px; color: var(--light-text-color);">
+                    <div style="margin-top:8px; font-size:12px; color: var(--light-text-color);">
                         💰 প্রতি বিজ্ঞাপনে $0.30 আয় হয়
                     </div>
                 </div>
             </section>
 
-            <!-- ===== WITHDRAW PAGE ===== -->
+            <!-- WITHDRAW PAGE -->
             <section id="withdraw-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -720,16 +771,16 @@
                     </h2>
                     <div class="balance" id="withdraw-balance-display">USD 0.00</div>
                     <div class="card-label">💰 Current Balance</div>
-                    <div style="margin-top: 20px; font-size: 14px; color: var(--light-text-color);">
+                    <div style="margin-top:16px; font-size:13px; color: var(--light-text-color);">
                         💳 Minimum withdraw: USD 50.00
                     </div>
-                    <div style="margin-top: 10px; font-size: 13px;" id="withdraw-referral-info">
+                    <div style="margin-top:8px; font-size:12px;" id="withdraw-referral-info">
                         👥 Need 15+ referrals to withdraw
                     </div>
                 </div>
 
                 <div class="withdraw-form-container">
-                    <h4 style="margin-top:0; text-align:left;">📝 Withdraw Details</h4>
+                    <h4 style="margin-top:0; text-align:left; font-size:15px;">📝 Withdraw Details</h4>
                     <form id="withdraw-form">
                         <div class="form-group">
                             <label for="withdraw-method">🏦 Withdraw Method</label>
@@ -742,21 +793,21 @@
                         </div>
                         <div class="form-group">
                             <label for="account-number">📱 Account Number</label>
-                            <input type="text" id="account-number" placeholder="Enter bKash/Binance/Nagad account number" required />
+                            <input type="text" id="account-number" placeholder="Enter account number" required />
                         </div>
                         <div class="form-group">
                             <label for="withdraw-amount">💵 Amount (USD)</label>
-                            <input type="number" id="withdraw-amount" placeholder="Enter amount to withdraw" required min="50" />
+                            <input type="number" id="withdraw-amount" placeholder="Enter amount" required min="50" />
                         </div>
                         <button type="submit" class="primary-btn" id="submit-withdraw-btn">
-                            ✅ Submit Withdraw Request
+                            ✅ Submit Request
                         </button>
                     </form>
                 </div>
 
-                <div class="profile-info" style="margin-top:20px;">
-                    <h4 style="margin-top:0; text-align:left;">
-                        <span class="material-icons" style="font-size:20px; vertical-align:middle;">pending</span>
+                <div class="profile-info" style="margin-top:16px;">
+                    <h4 style="margin-top:0; text-align:left; font-size:15px;">
+                        <span class="material-icons" style="font-size:18px; vertical-align:middle;">pending</span>
                         📋 Withdraw History
                     </h4>
                     <div id="pending-list">
@@ -768,29 +819,29 @@
                 </div>
             </section>
 
-            <!-- ===== REFERRAL PAGE ===== -->
+            <!-- REFERRAL PAGE -->
             <section id="referral-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
                         <span class="material-icons" style="color: var(--secondary-color);">share</span>
                         👥 Refer & Earn
                     </h2>
-                    <p style="color: var(--light-text-color); margin-bottom: 15px;">
-                        Invite your friends and earn <strong style="color: var(--secondary-color);">$0.50</strong> per referral!
+                    <p style="color: var(--light-text-color); margin-bottom:12px; font-size:14px;">
+                        Invite friends & earn <strong style="color: var(--secondary-color);">$0.50</strong> each!
                     </p>
-                    <div style="background: var(--background-color); padding:12px; border-radius:10px; margin-bottom:10px; border:1px solid var(--border-color);">
-                        <div style="font-size:13px; color:var(--light-text-color); margin-bottom:5px;">🔗 Your Referral Link:</div>
+                    <div style="background: var(--background-color); padding:10px; border-radius:10px; margin-bottom:10px; border:1px solid var(--border-color);">
+                        <div style="font-size:12px; color:var(--light-text-color); margin-bottom:4px;">🔗 Your Referral Link:</div>
                         <div class="referral-link-display" id="referral-link-display">Loading...</div>
                     </div>
                     <div class="referral-box">
                         <div class="referral-link-row">
                             <input type="text" id="referral-link-input" value="Loading..." readonly />
-                            <button id="copy-referral-btn" class="primary-btn" style="margin:0; padding:10px 15px; width:auto; flex-shrink:0;">
-                                <span class="material-icons" style="font-size:18px;">content_copy</span>
+                            <button id="copy-referral-btn" class="primary-btn" style="margin:0; padding:8px 12px; width:auto; flex-shrink:0;">
+                                <span class="material-icons" style="font-size:16px;">content_copy</span>
                             </button>
                         </div>
-                        <button id="share-referral-btn" class="secondary-btn" style="margin-top:10px;">
-                            <span class="material-icons" style="font-size:18px;">send</span> Share with Friends
+                        <button id="share-referral-btn" class="secondary-btn" style="margin-top:8px;">
+                            <span class="material-icons" style="font-size:16px;">send</span> Share with Friends
                         </button>
                     </div>
                     <div class="referral-stats">
@@ -806,18 +857,18 @@
                 </div>
             </section>
 
-            <!-- ===== PROFILE PAGE ===== -->
+            <!-- PROFILE PAGE -->
             <section id="profile-page" class="page">
-                <div class="card" style="padding:30px;">
+                <div class="card" style="padding:20px;">
                     <div class="profile-pic-container">
-                        <img id="profile-page-pic" src="" alt="Profile Picture" class="profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
+                        <img id="profile-page-pic" src="" alt="Profile" class="profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
                         <div class="profile-avatar" id="profile-avatar">U</div>
                     </div>
-                    <h3 id="profile-user-name" style="margin:0; font-weight:600;">User</h3>
-                    <p id="profile-user-username" style="margin:5px 0 0; color:var(--light-text-color); font-size:14px;">@telegram</p>
+                    <h3 id="profile-user-name" style="margin:0; font-weight:600; font-size:18px;">User</h3>
+                    <p id="profile-user-username" style="margin:4px 0 0; color:var(--light-text-color); font-size:13px;">@telegram</p>
                 </div>
                 <div class="profile-info">
-                    <h4 style="margin-top:0; text-align:left;">👤 My Profile</h4>
+                    <h4 style="margin-top:0; text-align:left; font-size:15px;">👤 My Profile</h4>
                     <div class="profile-info-row">
                         <span class="profile-label">💰 Current Balance</span>
                         <span class="profile-value" id="profile-balance">USD 0.00</span>
@@ -827,7 +878,7 @@
                         <span class="profile-value" id="profile-earnings">USD 0.00</span>
                     </div>
                     <div class="profile-info-row">
-                        <span class="profile-label">📺 Total Ads Watched</span>
+                        <span class="profile-label">📺 Ads Watched</span>
                         <span class="profile-value" id="profile-ads-watched">0</span>
                     </div>
                     <div class="profile-info-row">
@@ -867,7 +918,7 @@
         </nav>
     </div>
 
-    <!-- CONFETTI CONTAINER -->
+    <!-- CONFETTI -->
     <div class="confetti-container" id="confetti-container"></div>
 
     <script>
@@ -897,6 +948,27 @@
             const withdrawForm = document.getElementById('withdraw-form');
             const supportBtn = document.getElementById('support-btn');
             const dailyBonusBtn = document.getElementById('daily-bonus-btn');
+
+            // ========== TOAST SYSTEM ==========
+            function showToast(message, icon = '✅') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <span class="toast-icon">${icon}</span>
+                    <span class="toast-msg">${message}</span>
+                    <span class="toast-close material-icons">close</span>
+                `;
+                container.appendChild(toast);
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                }, 5000);
+                // Manual close
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.remove();
+                });
+            }
 
             // ========== USER DATA ==========
             function getUserData() {
@@ -960,16 +1032,16 @@
             function fireConfetti() {
                 const container = document.getElementById('confetti-container');
                 const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#10ac84', '#ff6348'];
-                for (let i = 0; i < 60; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.width = (Math.random() * 8 + 4) + 'px';
-                    confetti.style.height = (Math.random() * 8 + 4) + 'px';
-                    confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
-                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-                    container.appendChild(confetti);
+                for (let i = 0; i < 50; i++) {
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.left = Math.random() * 100 + '%';
+                    c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    c.style.width = (Math.random() * 6 + 3) + 'px';
+                    c.style.height = (Math.random() * 6 + 3) + 'px';
+                    c.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                    c.style.animationDelay = (Math.random() * 0.5) + 's';
+                    container.appendChild(c);
                 }
                 setTimeout(() => { container.innerHTML = ''; }, 3500);
             }
@@ -1120,7 +1192,7 @@
                 const today = new Date().toDateString();
                 if (lastBonus === new Date(today).getTime()) {
                     dailyBonusBtn.disabled = true;
-                    dailyBonusBtn.textContent = '✅ Already Claimed Today';
+                    dailyBonusBtn.innerHTML = '✅ Already Claimed Today';
                 } else {
                     dailyBonusBtn.disabled = false;
                     dailyBonusBtn.innerHTML = '<span class="material-icons">emoji_events</span> Claim Daily Bonus';
@@ -1155,7 +1227,7 @@
                 const today = new Date().toDateString();
                 const lastBonus = parseInt(getUserValue('lastDailyBonus') || '0');
                 if (lastBonus === new Date(today).getTime()) {
-                    tg.showAlert('✅ আপনি আজ বোনাস নিয়ে নিয়েছেন! কাল আবার আসুন।');
+                    showToast('আপনি আজ বোনাস নিয়ে নিয়েছেন! কাল আবার আসুন।', '✅');
                     return;
                 }
                 let realEarnings = parseFloat(getUserValue('earnings')) + DAILY_BONUS_AMOUNT;
@@ -1165,14 +1237,14 @@
                 setUserValue('lastDailyBonus', new Date(today).getTime());
                 const displayBonus = DAILY_BONUS_AMOUNT * (DISPLAY_REWARD / AD_REWARD);
                 fireConfetti();
-                tg.showAlert(`🎉 দারুণ! আপনি $${displayBonus.toFixed(2)} ডেইলি বোনাস পেয়েছেন! স্ট্রিক: ${streak} দিন 🔥`);
+                showToast(`🎉 দারুণ! আপনি $${displayBonus.toFixed(2)} বোনাস পেয়েছেন! স্ট্রিক: ${streak} দিন 🔥`, '🎉');
                 updateUI();
             });
 
             // ========== WATCH AD ==========
             watchAdBtn.addEventListener('click', () => {
                 if (parseInt(getUserValue('adsWatched')) >= DAILY_ADS_LIMIT) {
-                    tg.showAlert('⏰ আজকের জন্য আপনার সব এড দেখে ফেলেছেন! কাল আবার আসুন 🚀');
+                    showToast('⏰ আজকের জন্য সব এড দেখে ফেলেছেন! কাল আবার আসুন 🚀', '⏰');
                     return;
                 }
                 watchAdBtn.disabled = true;
@@ -1182,10 +1254,10 @@
                         let currentAdsWatched = parseInt(getUserValue('adsWatched')) + 1;
                         setUserValue('earnings', realEarnings);
                         setUserValue('adsWatched', currentAdsWatched);
-                        tg.showAlert(`🎉 অভিনন্দন! আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন! আরও আয় করতে আরও বিজ্ঞাপন দেখুন 💰`);
+                        showToast(`🎉 অভিনন্দন! আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন! 💰`, '🎉');
                     }).catch((e) => {
                         console.log('Ad error:', e);
-                        tg.showAlert('❌ বিজ্ঞাপনটি দেখাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                        showToast('❌ বিজ্ঞাপনটি দেখাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', '❌');
                     }).finally(() => {
                         updateUI();
                     });
@@ -1194,7 +1266,7 @@
                     let currentAdsWatched = parseInt(getUserValue('adsWatched')) + 1;
                     setUserValue('earnings', realEarnings);
                     setUserValue('adsWatched', currentAdsWatched);
-                    alert(`🎉 আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন! (Test Mode)`);
+                    showToast(`🎉 আপনি $${DISPLAY_REWARD.toFixed(2)} আয় করেছেন! (Test Mode)`, '🎉');
                     updateUI();
                 }
             });
@@ -1204,24 +1276,24 @@
                 e.preventDefault();
                 const referrals = parseInt(getUserValue('totalReferrals') || '0');
                 if (referrals < MIN_REFERRALS_FOR_WITHDRAW) {
-                    tg.showAlert(`❌ আপনাকে কমপক্ষে ${MIN_REFERRALS_FOR_WITHDRAW} জন রেফার করতে হবে।`);
+                    showToast(`❌ আপনাকে কমপক্ষে ${MIN_REFERRALS_FOR_WITHDRAW} জন রেফার করতে হবে।`, '❌');
                     return;
                 }
                 const displayAmount = parseFloat(document.getElementById('withdraw-amount').value);
                 const currentDisplayBalance = getDisplayBalance();
                 if (isNaN(displayAmount) || displayAmount < MIN_WITHDRAW_AMOUNT) {
-                    tg.showAlert(`❌ ন্যূনতম উইথড্রয়াল USD ${MIN_WITHDRAW_AMOUNT}`);
+                    showToast(`❌ ন্যূনতম উইথড্রয়াল USD ${MIN_WITHDRAW_AMOUNT}`, '❌');
                     return;
                 }
                 if (displayAmount > currentDisplayBalance) {
-                    tg.showAlert('❌ আপনার ব্যালেন্সের চেয়ে বেশি উইথড্র করতে পারবেন না!');
+                    showToast('❌ ব্যালেন্সের চেয়ে বেশি উইথড্র করতে পারবেন না!', '❌');
                     return;
                 }
                 const realAmount = getRealAmountFromDisplay(displayAmount);
                 const method = document.getElementById('withdraw-method').value;
                 const account = document.getElementById('account-number').value;
                 if (!method || !account) {
-                    tg.showAlert('❌ দয়া করে সব তথ্য পূরণ করুন!');
+                    showToast('❌ দয়া করে সব তথ্য পূরণ করুন!', '❌');
                     return;
                 }
                 tg.showConfirm(`✅ আপনি কি USD ${displayAmount.toFixed(2)} উইথড্র করতে চান?`, (confirmed) => {
@@ -1233,7 +1305,7 @@
                         withdrawForm.reset();
                         updateUI();
                         fireConfetti();
-                        tg.showAlert('✅ আপনার উইথড্র অনুরোধ সফলভাবে জমা হয়েছে! ২৪-৪৮ ঘণ্টার মধ্যে টাকা পাবেন 💳');
+                        showToast('✅ উইথড্র অনুরোধ জমা হয়েছে! ২৪-৪৮ ঘণ্টার মধ্যে পাবেন 💳', '✅');
                     }
                 });
             });
@@ -1242,11 +1314,11 @@
             document.getElementById('copy-referral-btn').addEventListener('click', () => {
                 const linkInput = document.getElementById('referral-link-input');
                 if (navigator.clipboard) {
-                    navigator.clipboard.writeText(linkInput.value).then(() => tg.showAlert('✅ রেফারেল লিংক কপি হয়েছে!'));
+                    navigator.clipboard.writeText(linkInput.value).then(() => showToast('✅ রেফারেল লিংক কপি হয়েছে!', '✅'));
                 } else {
                     linkInput.select();
                     document.execCommand('copy');
-                    tg.showAlert('✅ রেফারেল লিংক কপি হয়েছে!');
+                    showToast('✅ রেফারেল লিংক কপি হয়েছে!', '✅');
                 }
             });
 
@@ -1256,7 +1328,7 @@
                 if (tg.shareUrl) {
                     tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`);
                 } else {
-                    tg.showAlert(`আপনার রেফারেল লিংক:\n${link}`);
+                    showToast(`আপনার রেফারেল লিংক:\n${link}`, '🔗');
                 }
             });
 
@@ -1270,7 +1342,7 @@
                 setUserValue('referralEarnings', realRefEarnings);
                 const displayBonus = 0.50 * (DISPLAY_REWARD / AD_REWARD);
                 fireConfetti();
-                tg.showAlert(`🎊 দারুণ! আপনার বন্ধু যোগ দিয়েছে! আপনি $${displayBonus.toFixed(2)} বোনাস পেলেন! 🤝`);
+                showToast(`🎊 দারুণ! বন্ধু যোগ দিয়েছে! আপনি $${displayBonus.toFixed(2)} বোনাস পেলেন! 🤝`, '🎊');
                 updateUI();
             }
 
