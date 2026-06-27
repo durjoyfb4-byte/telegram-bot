@@ -637,7 +637,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
         <header class="header">
             <div class="header-avatar" id="header-avatar">U</div>
             <img id="header-profile-pic" src="" alt="Profile" class="header-profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
@@ -647,11 +646,9 @@
             </div>
         </header>
 
-        <!-- TOAST CONTAINER -->
         <div class="toast-container" id="toast-container"></div>
 
         <main class="content">
-            <!-- HOME PAGE -->
             <section id="home-page" class="page active">
                 <div class="social-proof" id="social-proof">
                     🔥 <strong id="social-users">১২</strong> জন ইউজার আজ <strong>$৫০০+</strong> উইথড্র করেছেন!
@@ -674,7 +671,6 @@
                     </button>
                 </div>
 
-                <!-- Daily Bonus -->
                 <div class="card" style="background: linear-gradient(135deg, #1e293b, #0f172a); border-color: #f59e0b;">
                     <div class="card-header">
                         <span class="material-icons" style="color: #f59e0b;">today</span>
@@ -710,7 +706,6 @@
                     <div class="dashboard-item-value" id="total-referrals">0</div>
                 </div>
 
-                <!-- Support Button -->
                 <div style="margin-top:16px;">
                     <button class="secondary-btn support-btn-custom" id="support-btn" style="margin-top:0;">
                         <span class="material-icons" style="font-size:18px;">support_agent</span>
@@ -722,7 +717,6 @@
                 </div>
             </section>
 
-            <!-- EARN PAGE -->
             <section id="earn-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -746,7 +740,6 @@
                 </div>
             </section>
 
-            <!-- WITHDRAW PAGE -->
             <section id="withdraw-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -803,7 +796,6 @@
                 </div>
             </section>
 
-            <!-- REFERRAL PAGE -->
             <section id="referral-page" class="page">
                 <div class="card">
                     <h2 class="card-header">
@@ -841,7 +833,6 @@
                 </div>
             </section>
 
-            <!-- PROFILE PAGE -->
             <section id="profile-page" class="page">
                 <div class="card" style="padding:20px;">
                     <div class="profile-pic-container">
@@ -877,7 +868,6 @@
             </section>
         </main>
 
-        <!-- FOOTER NAV -->
         <nav class="footer-nav">
             <div class="nav-item active" data-page="home-page">
                 <span class="material-icons">home</span>
@@ -902,7 +892,6 @@
         </nav>
     </div>
 
-    <!-- CONFETTI -->
     <div class="confetti-container" id="confetti-container"></div>
 
     <script>
@@ -913,9 +902,6 @@
             tg.expand();
             const userData = tg.initDataUnsafe.user;
             const userId = userData ? userData.id : 'guest';
-
-            // ========== BOT TOKEN ==========
-            const BOT_TOKEN = '8732196129:AAGUyvyPNqHdLNp8BBGtCH-IDUs4z0vgVL8';
 
             // ========== CONSTANTS ==========
             const DAILY_ADS_LIMIT = 50;
@@ -1034,54 +1020,30 @@
                 setTimeout(() => { container.innerHTML = ''; }, 3500);
             }
 
-            // ========== PROFILE PICTURE (Bot API) ==========
-            async function loadProfilePhotoFromBot(userId) {
-                try {
-                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUserProfilePhotos?user_id=${userId}&limit=1`;
-                    const response = await fetch(url);
-                    const data = await response.json();
+            // ========== PROFILE PICTURE ==========
+            function updateProfilePicture() {
+                if (!userData || !userData.photo_url) {
+                    document.getElementById('header-profile-pic').style.display = 'none';
+                    document.getElementById('header-avatar').style.display = 'flex';
                     
-                    if (data.ok && data.result.photos && data.result.photos.length > 0) {
-                        const fileId = data.result.photos[0][0].file_id;
-                        const fileUrl = `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`;
-                        const fileResponse = await fetch(fileUrl);
-                        const fileData = await fileResponse.json();
-                        
-                        if (fileData.ok) {
-                            const photoUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
-                            return photoUrl;
-                        }
-                    }
-                } catch (error) {
-                    console.log('Profile photo error:', error);
+                    document.getElementById('profile-page-pic').style.display = 'none';
+                    document.getElementById('profile-avatar').style.display = 'flex';
+                    return;
                 }
-                return null;
-            }
-
-            async function updateProfilePicture() {
-                if (!userId || userId === 'guest') return;
+                
+                const photoUrl = userData.photo_url;
                 
                 const headerImg = document.getElementById('header-profile-pic');
-                const profileImg = document.getElementById('profile-page-pic');
                 const headerAvatar = document.getElementById('header-avatar');
+                headerImg.src = photoUrl;
+                headerImg.style.display = 'block';
+                headerAvatar.style.display = 'none';
+                
+                const profileImg = document.getElementById('profile-page-pic');
                 const profileAvatar = document.getElementById('profile-avatar');
-                
-                const photoUrl = await loadProfilePhotoFromBot(userId);
-                
-                if (photoUrl) {
-                    headerImg.src = photoUrl;
-                    headerImg.style.display = 'block';
-                    headerAvatar.style.display = 'none';
-                    
-                    profileImg.src = photoUrl;
-                    profileImg.style.display = 'block';
-                    profileAvatar.style.display = 'none';
-                } else {
-                    headerImg.style.display = 'none';
-                    headerAvatar.style.display = 'flex';
-                    profileImg.style.display = 'none';
-                    profileAvatar.style.display = 'flex';
-                }
+                profileImg.src = photoUrl;
+                profileImg.style.display = 'block';
+                profileAvatar.style.display = 'none';
             }
 
             // ========== PENDING WITHDRAWALS ==========
@@ -1130,7 +1092,7 @@
             }
 
             // ========== UI UPDATE ==========
-            async function updateUI() {
+            function updateUI() {
                 const realEarnings = parseFloat(getUserValue('earnings'));
                 const adsWatched = parseInt(getUserValue('adsWatched'));
                 const referrals = parseInt(getUserValue('totalReferrals'));
@@ -1153,7 +1115,7 @@
                     document.getElementById('profile-avatar').textContent = initial;
                     
                     // প্রোফাইল পিকচার আপডেট
-                    await updateProfilePicture();
+                    updateProfilePicture();
                 }
 
                 // Level Badge
@@ -1342,7 +1304,7 @@
                     return;
                 }
                 if (displayAmount > currentDisplayBalance) {
-                    showToast('❌ ব্যালেন্সের চেয়ে বেশি উইথড্র করতে পারবেন না!', '❌');
+                    showToast('❌ ব্যালেন্সের চেয়ে বেশি উইথড্র করতে পারবেনভান না!', '❌');
                     return;
                 }
                 const realAmount = getRealAmountFromDisplay(displayAmount);
