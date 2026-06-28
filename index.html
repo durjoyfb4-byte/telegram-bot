@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
-    <!-- Monetag SDK (Zone ID: 11212771) -->
+    <!-- Monetag SDK -->
     <script src='//libtl.com/sdk.js' data-zone='11212771' data-sdk='show_11212771'></script>
 
     <!-- Firebase Compat SDK -->
@@ -17,6 +17,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <style>
+        /* ===== রুট ভেরিয়েবল ===== */
         :root {
             --primary: #3b82f6;
             --secondary: #10b981;
@@ -29,16 +30,23 @@
             --gold-dark: #d97706;
             --grad-start: #3b82f6;
             --grad-end: #8b5cf6;
+            --pending: #f59e0b;
+            --completed: #10b981;
+            --rejected: #ef4444;
         }
+
+        /* ===== রিসেট ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
             padding-bottom: 70px;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
+
+        /* ===== কন্টেইনার ===== */
         .container {
             max-width: 450px;
             margin: 0 auto;
@@ -48,6 +56,8 @@
             display: flex;
             flex-direction: column;
         }
+
+        /* ===== হেডার ===== */
         .header {
             display: flex;
             align-items: center;
@@ -99,7 +109,11 @@
             color: rgba(255,255,255,0.85);
             font-weight: 500;
         }
+
+        /* ===== ড্যাশবোর্ড ===== */
         .dashboard { padding: 16px; flex: 1; }
+
+        /* ===== ইউজার কার্ড ===== */
         .user-card {
             background: var(--bg);
             border-radius: 16px;
@@ -135,6 +149,7 @@
         .user-card .right .meta { font-size: 11px; color: var(--light); }
         .user-card .right .meta span { display: inline-block; margin-left: 8px; }
 
+        /* ===== ক্লেইম বাটন ===== */
         .claim-btn {
             width: 100%;
             padding: 14px;
@@ -163,10 +178,12 @@
         }
         .claim-btn .countdown { font-size: 14px; font-weight: 400; opacity: 0.9; }
 
+        /* ===== স্ট্যাটাস গ্রিড ===== */
         .stats-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
         .stats-row { display: grid; gap: 12px; }
         .stats-row-3 { grid-template-columns: 1fr 1fr 1fr; }
         .stats-row-2 { grid-template-columns: 1fr 1fr; }
+
         .stat-item {
             background: var(--bg);
             border-radius: 14px;
@@ -187,6 +204,7 @@
         }
         .stat-item .progress-track .fill { height: 100%; background: var(--secondary); width: 0%; transition: width 0.4s; }
 
+        /* ===== সোশ্যাল প্রুফ ===== */
         .social-proof {
             background: rgba(16,185,129,0.08);
             border: 1px solid rgba(16,185,129,0.15);
@@ -199,10 +217,12 @@
         }
         .social-proof strong { color: var(--secondary); }
 
+        /* ===== পেজ ===== */
         .page { display: none; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
+        /* ===== কার্ড ===== */
         .card {
             background: var(--bg);
             border-radius: 14px;
@@ -222,6 +242,7 @@
         }
         .card-header .material-icons { color: var(--primary); }
 
+        /* ===== বাটন ===== */
         .primary-btn, .secondary-btn {
             border: none;
             padding: 12px;
@@ -262,6 +283,7 @@
             box-shadow: 0 4px 15px rgba(139,92,246,0.3);
         }
 
+        /* ===== প্রগ্রেস বার ===== */
         .progress-bar-container {
             height: 8px;
             background: var(--border);
@@ -271,6 +293,7 @@
         }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.5s; }
 
+        /* ===== ফুটার নেভিগেশন ===== */
         .footer-nav {
             display: flex;
             justify-content: space-around;
@@ -301,6 +324,7 @@
         .nav-item.active { color: var(--primary); }
         .nav-item.active .material-icons { transform: scale(1.05); }
 
+        /* ===== কনফেটি ===== */
         .confetti-container {
             position: fixed;
             top: 0; left: 0;
@@ -320,6 +344,7 @@
             100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
         }
 
+        /* ===== প্রোফাইল ===== */
         .profile-pic-container {
             width: 72px; height: 72px;
             border-radius: 50%;
@@ -346,6 +371,7 @@
         .profile-label { font-size:14px; color:var(--light); }
         .profile-value { font-size:14px; font-weight:600; color:var(--primary); }
 
+        /* ===== ফর্ম ===== */
         .form-group { margin-bottom:12px; text-align:left; }
         .form-group label { display:block; font-size:13px; font-weight:600; color:var(--light); margin-bottom:4px; }
         .form-group input, .form-group select {
@@ -354,6 +380,7 @@
         }
         .form-group input:focus, .form-group select:focus { outline:none; border-color:var(--primary); }
 
+        /* ===== রেফারেল ===== */
         .referral-link-display {
             background:var(--bg); padding:8px 12px; border-radius:8px;
             font-size:12px; color:var(--light); word-break:break-all;
@@ -364,6 +391,54 @@
         .referral-link-row input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:12px; min-width:0; }
         .referral-link-row button { margin:0; padding:8px 12px; width:auto; flex-shrink:0; }
 
+        /* ===== পেন্ডিং লিস্ট ===== */
+        .pending-item {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+        .pending-item .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pending-item .amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        .pending-item .method {
+            font-size: 13px;
+            color: var(--light);
+        }
+        .pending-item .status {
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .status-pending { background: var(--pending); color: #000; }
+        .status-completed { background: var(--completed); color: #fff; }
+        .status-rejected { background: var(--rejected); color: #fff; }
+        .pending-item .date {
+            font-size: 11px;
+            color: var(--light);
+            margin-top: 4px;
+        }
+        .pending-empty {
+            text-align: center;
+            color: var(--light);
+            padding: 20px 0;
+        }
+        .pending-empty .material-icons {
+            font-size: 40px;
+            color: var(--border);
+        }
+
+        /* ===== রেস্পন্সিভ ===== */
         @media (max-width: 400px) {
             .user-card .right .balance { font-size: 24px; }
             .stat-item .value { font-size: 17px; }
@@ -371,7 +446,11 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== কন্টেইনার ===== -->
     <div class="container">
+
+        <!-- ===== হেডার ===== -->
         <header class="header">
             <div class="header-avatar" id="header-avatar">U</div>
             <img id="header-profile-pic" src="" alt="Profile" class="header-profile-pic" referrerpolicy="no-referrer" crossorigin="anonymous" />
@@ -381,10 +460,14 @@
             </div>
         </header>
 
+        <!-- ===== ড্যাশবোর্ড ===== -->
         <main class="dashboard">
-            <!-- HOME -->
+
+            <!-- ===== হোম পেজ ===== -->
             <section id="home-page" class="page active">
-                <div class="social-proof">🔥 <strong id="social-users">১২</strong> জন ইউজার আজ <strong>$৫০০+</strong> উইথড্র করেছেন!</div>
+                <div class="social-proof">
+                    🔥 <strong id="social-users">১২</strong> জন ইউজার আজ <strong>$৫০০+</strong> উইথড্র করেছেন!
+                </div>
 
                 <div class="user-card">
                     <div class="left">
@@ -401,7 +484,9 @@
                     </div>
                 </div>
 
-                <button class="claim-btn" id="claim-btn"><span class="material-icons">emoji_events</span> CLAIM NOW</button>
+                <button class="claim-btn" id="claim-btn">
+                    <span class="material-icons">emoji_events</span> CLAIM NOW
+                </button>
 
                 <div class="stats-grid">
                     <div class="stats-row stats-row-3">
@@ -442,10 +527,12 @@
                 <button class="secondary-btn support-btn" id="support-btn" style="margin-top:0;">
                     <span class="material-icons">support_agent</span> 📞 সাপোর্টে যোগাযোগ করুন
                 </button>
-                <p style="font-size:9px;color:var(--light);text-align:center;margin-top:4px;">⏰ সাপোর্ট সময়: সকাল ৯টা — রাত ১১টা</p>
+                <p style="font-size:9px;color:var(--light);text-align:center;margin-top:4px;">
+                    ⏰ সাপোর্ট সময়: সকাল ৯টা — রাত ১১টা
+                </p>
             </section>
 
-            <!-- EARN -->
+            <!-- ===== আর্ন পেজ ===== -->
             <section id="earn-page" class="page">
                 <div class="card">
                     <div class="card-header"><span class="material-icons">monetization_on</span> Earn Rewards</div>
@@ -454,12 +541,17 @@
                         <div style="font-size:12px;color:var(--light);" id="ad-progress-text">Completed: 0 / 50</div>
                     </div>
                     <div class="progress-bar-container"><div class="progress-bar" id="ad-progress-bar"></div></div>
-                    <button class="primary-btn" id="watch-ad-btn">🎬 বিজ্ঞাপন দেখুন ও আয় করুন <span class="material-icons">play_circle_filled</span></button>
-                    <div style="margin-top:8px;font-size:12px;color:var(--light);">💰 প্রতি বিজ্ঞাপনে $0.30 আয় হয়</div>
+                    <button class="primary-btn" id="watch-ad-btn">
+                        🎬 বিজ্ঞাপন দেখুন ও আয় করুন
+                        <span class="material-icons">play_circle_filled</span>
+                    </button>
+                    <div style="margin-top:8px;font-size:12px;color:var(--light);">
+                        💰 প্রতি বিজ্ঞাপনে $0.30 আয় হয়
+                    </div>
                 </div>
             </section>
 
-            <!-- WITHDRAW -->
+            <!-- ===== উইথড্র পেজ ===== -->
             <section id="withdraw-page" class="page">
                 <div class="card">
                     <div class="card-header"><span class="material-icons">currency_exchange</span> Withdraw Your Earnings</div>
@@ -468,6 +560,7 @@
                     <div style="margin-top:16px;font-size:13px;color:var(--light);">💳 Minimum withdraw: $50.00</div>
                     <div style="margin-top:8px;font-size:12px;" id="withdraw-referral-info">👥 Need 15+ referrals to withdraw</div>
                 </div>
+
                 <div class="card" style="text-align:left;">
                     <h4 style="margin-top:0;">📝 Withdraw Details</h4>
                     <form id="withdraw-form">
@@ -491,13 +584,19 @@
                         <button type="submit" class="primary-btn" id="submit-withdraw-btn">✅ Submit Request</button>
                     </form>
                 </div>
+
                 <div class="card" style="text-align:left;">
                     <h4 style="margin-top:0;"><span class="material-icons" style="vertical-align:middle;">pending</span> 📋 Withdraw History</h4>
-                    <div id="pending-list"><div class="pending-empty" style="text-align:center;color:var(--light);padding:20px 0;"><span class="material-icons">history</span><p>No withdrawal requests yet</p></div></div>
+                    <div id="pending-list">
+                        <div class="pending-empty">
+                            <span class="material-icons">history</span>
+                            <p>No withdrawal requests yet</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- REFERRAL -->
+            <!-- ===== রেফারেল পেজ ===== -->
             <section id="referral-page" class="page">
                 <div class="card">
                     <div class="card-header"><span class="material-icons" style="color:var(--secondary);">share</span> 👥 Refer & Earn</div>
@@ -509,9 +608,13 @@
                     <div class="referral-box">
                         <div class="referral-link-row">
                             <input type="text" id="referral-link-input" value="Loading..." readonly />
-                            <button id="copy-referral-btn" class="primary-btn" style="margin:0;padding:8px 12px;width:auto;flex-shrink:0;"><span class="material-icons" style="font-size:16px;">content_copy</span></button>
+                            <button id="copy-referral-btn" class="primary-btn" style="margin:0;padding:8px 12px;width:auto;flex-shrink:0;">
+                                <span class="material-icons" style="font-size:16px;">content_copy</span>
+                            </button>
                         </div>
-                        <button id="share-referral-btn" class="secondary-btn" style="margin-top:8px;"><span class="material-icons" style="font-size:16px;">send</span> Share with Friends</button>
+                        <button id="share-referral-btn" class="secondary-btn" style="margin-top:8px;">
+                            <span class="material-icons" style="font-size:16px;">send</span> Share with Friends
+                        </button>
                     </div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
                         <div class="stat-item" style="background:var(--bg);padding:12px;border-radius:10px;text-align:center;border:1px solid var(--border);">
@@ -526,7 +629,7 @@
                 </div>
             </section>
 
-            <!-- PROFILE -->
+            <!-- ===== প্রোফাইল পেজ ===== -->
             <section id="profile-page" class="page">
                 <div class="card" style="padding:20px;">
                     <div class="profile-pic-container">
@@ -545,8 +648,10 @@
                     <div class="profile-info-row"><span class="profile-label">⭐ Level</span><span class="profile-value" id="profile-level">Beginner</span></div>
                 </div>
             </section>
+
         </main>
 
+        <!-- ===== ফুটার নেভিগেশন ===== -->
         <nav class="footer-nav">
             <div class="nav-item active" data-page="home-page"><span class="material-icons">home</span><span>Home</span></div>
             <div class="nav-item" data-page="earn-page"><span class="material-icons">play_circle</span><span>Earn</span></div>
@@ -556,12 +661,14 @@
         </nav>
     </div>
 
+    <!-- ===== কনফেটি কন্টেইনার ===== -->
     <div class="confetti-container" id="confetti-container"></div>
 
+    <!-- ================================================================ -->
+    <!--  ফায়ারবেস কনফিগ (আপনার নিজের তথ্য দিন)                         -->
+    <!-- ================================================================ -->
     <script>
-        // ================================================================
-        //  🔥 FIREBASE CONFIG
-        // ================================================================
+        // 🔥 এখানে আপনার Firebase Config বসান
         const firebaseConfig = {
             apiKey: "AIzaSyCVp8jm1NOdKAmJAKt4IODdsnMr-mPfgng",
             authDomain: "telegram-bot-7fb21.firebaseapp.com",
@@ -573,7 +680,7 @@
         };
 
         // ================================================================
-        //  GLOBALS
+        //  টেলিগ্রাম ও গ্লোবাল ভেরিয়েবল
         // ================================================================
         const tg = window.Telegram.WebApp;
         tg.ready();
@@ -581,7 +688,9 @@
         const userData = tg.initDataUnsafe.user;
         const telegramId = userData ? userData.id.toString() : 'guest';
 
-        const BOT_TOKEN = '8732196129:AAGUyvyPNqHdLNp8BBGtCH-IDUs4z0vgVL8';
+        // ================================================================
+        //  কনস্ট্যান্ট
+        // ================================================================
         const DAILY_ADS_LIMIT = 50;
         const AD_REWARD = 0.02;
         const DISPLAY_REWARD = 0.30;
@@ -592,7 +701,7 @@
         const ADS_TARGET = 1000;
 
         // ================================================================
-        //  DOM REFS
+        //  ডিওএম রেফারেন্স
         // ================================================================
         const navItems = document.querySelectorAll('.nav-item');
         const pages = document.querySelectorAll('.page');
@@ -604,7 +713,7 @@
         const claimBtn = document.getElementById('claim-btn');
 
         // ================================================================
-        //  FIREBASE + FALLBACK
+        //  ফায়ারবেস + লোকালস্টোরেজ ফলব্যাক
         // ================================================================
         let useFirebase = true;
         let userDocRef = null;
@@ -714,7 +823,7 @@
         }
 
         // ================================================================
-        //  DISPLAY vs REAL
+        //  ডিসপ্লে ভার্সাস রিয়েল
         // ================================================================
         function getDisplayBalance(realEarnings) {
             return realEarnings * (DISPLAY_REWARD / AD_REWARD);
@@ -729,7 +838,7 @@
         }
 
         // ================================================================
-        //  LEVEL SYSTEM
+        //  লেভেল সিস্টেম
         // ================================================================
         function getLevel(adsWatched) {
             if (adsWatched >= 1000) return { name: '👑 Diamond' };
@@ -740,7 +849,7 @@
         }
 
         // ================================================================
-        //  CONFETTI
+        //  কনফেটি
         // ================================================================
         function fireConfetti() {
             const container = document.getElementById('confetti-container');
@@ -760,7 +869,7 @@
         }
 
         // ================================================================
-        //  PROFILE PICTURE (referrerpolicy="no-referrer")
+        //  প্রোফাইল পিকচার (referrerpolicy="no-referrer")
         // ================================================================
         function setProfilePicture(url) {
             const headerImg = document.getElementById('header-profile-pic');
@@ -772,7 +881,6 @@
                 headerImg.src = url;
                 headerImg.style.display = 'block';
                 headerAvatar.style.display = 'none';
-                
                 profileImg.src = url;
                 profileImg.style.display = 'block';
                 profileAvatar.style.display = 'none';
@@ -785,7 +893,7 @@
         }
 
         // ================================================================
-        //  PENDING WITHDRAWALS
+        //  পেন্ডিং উইথড্রয়াল
         // ================================================================
         async function addPendingWithdrawal(realAmount, displayAmount, method, account) {
             const data = await getUserData();
@@ -808,40 +916,40 @@
             const data = await getUserData();
             const pending = data.pendingWithdrawals || [];
             if (pending.length === 0) {
-                container.innerHTML = `<div class="pending-empty" style="text-align:center;color:var(--light);padding:20px 0;"><span class="material-icons">history</span><p>No withdrawal requests yet</p></div>`;
+                container.innerHTML = `<div class="pending-empty"><span class="material-icons">history</span><p>No withdrawal requests yet</p></div>`;
                 return;
             }
             container.innerHTML = pending.map(item => {
                 let statusText = '⏳ Pending', bg = '#f59e0b', color = '#000';
                 if (item.status === 'completed') { statusText = '✅ Completed'; bg = '#10b981'; color = '#fff'; }
                 else if (item.status === 'rejected') { statusText = '❌ Rejected'; bg = '#ef4444'; color = '#fff'; }
-                return `<div style="background:var(--bg);border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border);text-align:left;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-weight:700;color:var(--secondary);">$${item.displayAmount.toFixed(2)}</span>
-                        <span style="font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;background:${bg};color:${color}">${statusText}</span>
+                return `<div class="pending-item">
+                    <div class="top-row">
+                        <span class="amount">$${item.displayAmount.toFixed(2)}</span>
+                        <span class="status" style="background:${bg};color:${color}">${statusText}</span>
                     </div>
-                    <div style="font-size:13px;color:var(--light);">${item.method} - ${item.account}</div>
-                    <div style="font-size:11px;color:var(--light);margin-top:4px;">📅 ${item.date}</div>
+                    <div class="method">${item.method} - ${item.account}</div>
+                    <div class="date">📅 ${item.date}</div>
                 </div>`;
             }).join('');
         }
 
         // ================================================================
-        //  REFERRAL
+        //  রেফারেল
         // ================================================================
         function generateReferralLink() {
             return `https://t.me/USDEarningBot?start=${telegramId}`;
         }
 
         // ================================================================
-        //  SOCIAL PROOF
+        //  সোশ্যাল প্রুফ
         // ================================================================
         function updateSocialProof() {
             document.getElementById('social-users').textContent = Math.floor(Math.random()*20)+5;
         }
 
         // ================================================================
-        //  MAIN UI UPDATE
+        //  ইউআই আপডেট
         // ================================================================
         async function updateUI() {
             const data = await getUserData();
@@ -855,7 +963,7 @@
             const displayRefEarnings = getDisplayReferralEarnings(realRefEarnings);
             const level = getLevel(adsWatched);
 
-            // User Info
+            // ইউজার ইনফো
             if (userData) {
                 const fullName = `${userData.first_name||''} ${userData.last_name||''}`.trim();
                 const initial = fullName.charAt(0).toUpperCase() || 'U';
@@ -867,8 +975,6 @@
                 document.getElementById('home-user-username').textContent = uname ? `@${uname}` : 'No username';
                 document.getElementById('profile-user-username').textContent = uname ? `@${uname}` : 'No username';
                 document.getElementById('profile-avatar').textContent = initial;
-                
-                // 🔥 প্রোফাইল পিকচার (referrerpolicy="no-referrer")
                 if (userData.photo_url) {
                     setProfilePicture(userData.photo_url);
                 } else {
@@ -876,46 +982,46 @@
                 }
             }
 
-            // Level
+            // লেভেল
             document.getElementById('home-level').textContent = level.name.replace(/[^\w\s]/g,'').trim();
             document.getElementById('profile-level').textContent = level.name.replace(/[^\w\s]/g,'').trim();
 
-            // Balance
+            // ব্যালেন্স
             document.getElementById('home-balance').textContent = `$${displayBalance.toFixed(2)}`;
             document.getElementById('profile-balance').textContent = `$${displayBalance.toFixed(2)}`;
             document.getElementById('profile-earnings').textContent = `$${displayBalance.toFixed(2)}`;
             document.getElementById('stat-total-earning').textContent = `$${displayBalance.toFixed(2)}`;
             document.getElementById('withdraw-balance-display').textContent = `$${displayBalance.toFixed(2)}`;
 
-            // Last claim & Min
+            // লাস্ট ক্লেইম ও মিনিমাম
             const lastClaimDisplay = lastBonusTime > 0 ? `$${(DAILY_BONUS_AMOUNT * (DISPLAY_REWARD / AD_REWARD)).toFixed(2)}` : '$0.00';
             document.getElementById('home-last-claim').textContent = `Last Claim: ${lastClaimDisplay}`;
             document.getElementById('home-withdraw-min').textContent = `Min. $${MIN_WITHDRAW_AMOUNT}.00`;
 
-            // Ads
+            // এডস
             document.getElementById('profile-ads-watched').textContent = adsWatched;
             document.getElementById('stat-ads-watched').textContent = adsWatched;
             document.getElementById('stat-ads-progress').textContent = `${adsWatched}/${ADS_TARGET}`;
             const progress = Math.min((adsWatched / ADS_TARGET) * 100, 100);
             document.getElementById('stat-ads-bar').style.width = progress + '%';
 
-            // Daily bonus display
+            // ডেইলি বোনাস ডিসপ্লে
             document.getElementById('stat-daily-bonus').textContent = `$${(DAILY_BONUS_AMOUNT * (DISPLAY_REWARD / AD_REWARD)).toFixed(2)}`;
             document.getElementById('stat-rewarded-ad').textContent = `$${DISPLAY_REWARD.toFixed(2)}`;
             document.getElementById('stat-invite-friend').textContent = `$${(0.50 * (DISPLAY_REWARD / AD_REWARD)).toFixed(2)}`;
 
-            // Referrals
+            // রেফারেল
             document.getElementById('profile-referrals').textContent = referrals;
             document.getElementById('ref-total').textContent = referrals;
             document.getElementById('ref-earnings').textContent = `$${displayRefEarnings.toFixed(2)}`;
 
-            // Earn page
+            // আর্ন পেজ
             document.getElementById('ad-progress-text').textContent = `Completed: ${adsWatched} / ${DAILY_ADS_LIMIT}`;
             const earnProgress = Math.min((adsWatched / DAILY_ADS_LIMIT) * 100, 100);
             document.getElementById('ad-progress-bar').style.width = earnProgress + '%';
             watchAdBtn.disabled = adsWatched >= DAILY_ADS_LIMIT;
 
-            // Withdraw page
+            // উইথড্র পেজ
             const canWithdraw = referrals >= MIN_REFERRALS_FOR_WITHDRAW;
             const withdrawSubmitBtn = document.getElementById('submit-withdraw-btn');
             const withdrawInfo = document.getElementById('withdraw-referral-info');
@@ -931,12 +1037,12 @@
                 withdrawInfo.style.color = 'var(--secondary)';
             }
 
-            // Referral link
+            // রেফারেল লিংক
             const link = generateReferralLink();
             document.getElementById('referral-link-input').value = link;
             document.getElementById('referral-link-display').textContent = link;
 
-            // Claim button (countdown)
+            // ক্লেইম বাটন (কাউন্টডাউন)
             const oneDay = 24 * 60 * 60 * 1000;
             const now = Date.now();
             const diff = now - lastBonusTime;
@@ -980,7 +1086,7 @@
         }
 
         // ================================================================
-        //  PAGE SWITCH
+        //  পেজ সুইচ
         // ================================================================
         function showPage(targetPageId) {
             navItems.forEach(n => n.classList.remove('active'));
@@ -997,14 +1103,14 @@
         withdrawBtn?.addEventListener('click', () => showPage('withdraw-page'));
 
         // ================================================================
-        //  SUPPORT
+        //  সাপোর্ট
         // ================================================================
         supportBtn.addEventListener('click', () => {
             tg.openTelegramLink(SUPPORT_LINK);
         });
 
         // ================================================================
-        //  CLAIM DAILY BONUS
+        //  ক্লেইম ডেইলি বোনাস
         // ================================================================
         claimBtn.addEventListener('click', async function() {
             const data = await getUserData();
@@ -1027,7 +1133,7 @@
         });
 
         // ================================================================
-        //  WATCH AD (Monetag Rewarded Popup)
+        //  ওয়াচ এড (Monetag Rewarded Popup)
         // ================================================================
         watchAdBtn.addEventListener('click', async function() {
             const data = await getUserData();
@@ -1052,7 +1158,7 @@
                     watchAdBtn.disabled = false;
                 });
             } else {
-                // Fallback
+                // ফলব্যাক
                 let realEarnings = (data.earnings || 0) + AD_REWARD;
                 let currentAdsWatched = (data.adsWatched || 0) + 1;
                 await updateUserField('earnings', realEarnings);
@@ -1064,7 +1170,7 @@
         });
 
         // ================================================================
-        //  WITHDRAW
+        //  উইথড্র
         // ================================================================
         withdrawForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1106,7 +1212,7 @@
         });
 
         // ================================================================
-        //  REFERRAL COPY & SHARE
+        //  রেফারেল কপি ও শেয়ার
         // ================================================================
         document.getElementById('copy-referral-btn').addEventListener('click', function() {
             const linkInput = document.getElementById('referral-link-input');
@@ -1130,7 +1236,7 @@
         });
 
         // ================================================================
-        //  REFERRAL FROM URL
+        //  রেফারেল ফ্রম ইউআরএল
         // ================================================================
         async function addReferral() {
             const data = await getUserData();
@@ -1156,7 +1262,7 @@
         checkReferralFromURL();
 
         // ================================================================
-        //  INIT
+        //  আরম্ভ
         // ================================================================
         async function initApp() {
             tg.showAlert('⏳ সংযোগ স্থাপন হচ্ছে...');
@@ -1181,5 +1287,6 @@
 
         initApp();
     </script>
+
 </body>
 </html>
